@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Attendance Management System</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f8f4;
+    }
+    header {
+      background-color: #2e7d32;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav {
+      background-color: #388e3c;
+      color: white;
+      padding: 0.5rem 1rem;
+      display: flex;
+      gap: 1rem;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+    }
+    nav a:hover {
+      background-color: #2e7d32;
+    }
+    .container {
+      padding: 2rem;
+    }
+    .stats-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .card {
+      background-color: #fff;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      width: 250px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .charts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    .chart-container {
+      background: white;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 500px;
+    }
+    .announcements {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-top: 2rem;
+    }
+    .filters {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    select {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+    }
+    .footer {
+      background-color: #2e7d32;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    .dashboard-table {
+      margin-top: 2rem;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .dashboard-table h4 {
+      margin-bottom: 1rem;
+    }
+    .dashboard-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .dashboard-table th, .dashboard-table td {
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    .dashboard-table th {
+      background-color: #e0f2f1;
+    }
+    .upcoming-events {
+      margin-top: 2rem;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .upcoming-events h4 {
+      margin-bottom: 1rem;
+    }
+    .upcoming-events ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .upcoming-events li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>Student Dashboard</h2>
+    <span>Welcome, John Doe</span>
+  </header>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Attendance</a>
+    <a href="#">Profile</a>
+    <a href="#">Marks</a>
+    <a href="#">Calendar & Timetable</a>
+    <a href="#">Feedback</a>
+    <a href="#">Dashboard</a>
+  </nav>
+  <div class="container">
+    <h3>Quick Stats</h3>
+    <div class="stats-cards">
+      <div class="card">
+        <h4>Attendance %</h4>
+        <p>89%</p>
+      </div>
+      <div class="card">
+        <h4>Average Marks</h4>
+        <p>78%</p>
+      </div>
+      <div class="card">
+        <h4>Subjects</h4>
+        <p>6</p>
+      </div>
+    </div>
+
+    <div class="charts">
+      <div class="chart-container">
+        <h4>Attendance Overview</h4>
+        <canvas id="attendanceChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h4>Marks Trend</h4>
+        <canvas id="marksChart"></canvas>
+      </div>
+    </div>
+
+    <div class="dashboard-table">
+      <h4>Attendance Table</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Subject</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2025-03-20</td>
+            <td>Math</td>
+            <td>Present</td>
+          </tr>
+          <tr>
+            <td>2025-03-20</td>
+            <td>Physics</td>
+            <td>Absent</td>
+          </tr>
+          <tr>
+            <td>2025-03-19</td>
+            <td>Chemistry</td>
+            <td>Present</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="announcements">
+      <h4>Recent Announcements</h4>
+      <ul>
+        <li>Timetable Updated: Period 3 of Monday replaced by Physics.</li>
+        <li>Upcoming Event: Chemistry Seminar on April 3.</li>
+        <li>Midterm Exams begin on March 25.</li>
+      </ul>
+    </div>
+
+    <div class="upcoming-events">
+      <h4>Upcoming Events</h4>
+      <ul>
+        <li>Workshop on AI Tools - March 23</li>
+        <li>Sports Day - March 27</li>
+        <li>Group Discussion Competition - March 30</li>
+      </ul>
+    </div>
+
+    <div class="filters">
+      <select>
+        <option>Filter by Date</option>
+        <option>Last 7 Days</option>
+        <option>This Month</option>
+      </select>
+      <select>
+        <option>Filter by Subject</option>
+        <option>Math</option>
+        <option>Physics</option>
+        <option>Chemistry</option>
+      </select>
+      <select>
+        <option>Filter by Exam Type</option>
+        <option>Internal</option>
+        <option>External</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="footer">&copy; 2025 Attendance Management System. All rights reserved.</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx1 = document.getElementById('attendanceChart');
+    new Chart(ctx1, {
+      type: 'doughnut',
+      data: {
+        labels: ['Present', 'Absent'],
+        datasets: [{
+          label: 'Attendance',
+          data: [89, 11],
+          backgroundColor: ['#66bb6a', '#ef5350']
+        }]
+      }
+    });
+
+    const ctx2 = document.getElementById('marksChart');
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ['Math', 'Physics', 'Chemistry', 'English', 'Biology', 'Computer'],
+        datasets: [{
+          label: 'Marks (%)',
+          data: [82, 75, 80, 77, 74, 78],
+          backgroundColor: '#42a5f5'
+        }]
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Attendance - Attendance Management System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f8f4;
+      color: #333;
+    }
+    header {
+      background-color: #2e7d32;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav {
+      background-color: #388e3c;
+      color: white;
+      padding: 0.5rem 1rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      transition: background-color 0.3s;
+    }
+    nav a:hover {
+      background-color: #2e7d32;
+    }
+    .container {
+      padding: 1rem 2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    table th,
+    table td {
+      border: 1px solid #ccc;
+      padding: 0.75rem;
+      text-align: center;
+    }
+    table th {
+      background-color: #e8f5e9;
+      color: #1b5e20;
+    }
+    table tbody tr:nth-child(even) td {
+      background-color: #f9f9f9;
+    }
+    .summary-cards {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .card {
+      flex: 1;
+      min-width: 150px;
+      background-color: #ffffff;
+      border-left: 5px solid #4caf50;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .chart-container {
+      max-width: 500px;
+      margin: 2rem auto;
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .footer {
+      background-color: #2e7d32;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    .feedback-form {
+      max-width: 600px;
+      margin: 2rem auto;
+      background-color: #ffffff;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .feedback-form h3 {
+      margin-bottom: 1rem;
+    }
+    .feedback-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .feedback-form select,
+    .feedback-form textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+    }
+    .feedback-form button {
+      background-color: #4caf50;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .feedback-form button:hover {
+      background-color: #388e3c;
+    }
+    .calendar-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background-color: #ffffff;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .calendar-container h3 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .calendar-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    .calendar-table th, .calendar-table td {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      height: 80px;
+    }
+    .calendar-table th {
+      background-color: #e8f5e9;
+      color: #1b5e20;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>Student Attendance</h2>
+    <span>Welcome, John Doe</span>
+  </header>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Attendance</a>
+    <a href="#">Profile</a>
+    <a href="#">Marks</a>
+    <a href="#">Calendar</a>
+    <a href="#">Timetables</a>
+    <a href="#">Feedback</a>
+    <a href="#">Dashboard</a>
+  </nav>
+
+  <div class="container">
+    <h3>Attendance Overview</h3>
+    <div class="summary-cards">
+      <div class="card">
+        <strong>Total Classes:</strong>
+        <p>120</p>
+      </div>
+      <div class="card">
+        <strong>Classes Attended:</strong>
+        <p>110</p>
+      </div>
+      <div class="card">
+        <strong>Attendance %:</strong>
+        <p>91.7%</p>
+      </div>
+    </div>
+
+    <h3>Classwise Attendance</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Period 1</th>
+          <th>Period 2</th>
+          <th>Period 3</th>
+          <th>Period 4</th>
+          <th>Period 5</th>
+          <th>Period 6</th>
+          <th>Period 7</th>
+          <th>Period 8</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2025-03-17</td>
+          <td>P</td><td>P</td><td>P</td><td>A</td><td>P</td><td>P</td><td>A</td><td>P</td>
+        </tr>
+        <tr>
+          <td>2025-03-18</td>
+          <td>P</td><td>A</td><td>A</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td>
+        </tr>
+        <tr>
+          <td>2025-03-19</td>
+          <td>A</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>P</td><td>A</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="chart-container">
+      <canvas id="attendanceChart"></canvas>
+    </div>
+
+    <div class="calendar-container">
+      <h3>Attendance Calendar</h3>
+      <table class="calendar-table">
+        <thead>
+          <tr>
+            <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+          <tr><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td></tr>
+          <tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr>
+          <tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr>
+          <tr><td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="feedback-form">
+      <h3>Feedback on Teachers</h3>
+      <form>
+        <label for="teacher">Select Teacher:</label>
+        <select id="teacher" name="teacher">
+          <option value="teacher1">Dr. A Sharma</option>
+          <option value="teacher2">Ms. B Kapoor</option>
+          <option value="teacher3">Mr. C Verma</option>
+        </select>
+
+        <label for="feedback">Feedback:</label>
+        <textarea id="feedback" name="feedback" rows="4" placeholder="Write your feedback here..."></textarea>
+
+        <button type="submit">Submit Feedback</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Attendance Management System. All rights reserved.
+  </div>
+
+  <script>
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    const attendanceChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Present', 'Absent'],
+        datasets: [{
+          data: [110, 10],
+          backgroundColor: ['#66bb6a', '#ef5350'],
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' },
+          title: {
+            display: true,
+            text: 'Attendance Distribution'
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

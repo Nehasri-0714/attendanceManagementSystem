@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Page - Attendance Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f8f4;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background-color: #2e7d32;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #2e7d32;
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input[type="text"], select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+    }
+    .stars {
+      display: flex;
+      gap: 0.25rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .star {
+      color: #ccc;
+    }
+    .star.selected {
+      color: #fbc02d;
+    }
+    .submit-btn {
+      margin-top: 1.5rem;
+      background-color: #4caf50;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .submit-btn:hover {
+      background-color: #388e3c;
+    }
+    .confirmation {
+      margin-top: 1rem;
+      color: #2e7d32;
+      font-weight: bold;
+    }
+    .past-feedback {
+      margin-top: 2rem;
+      background-color: #e8f5e9;
+      padding: 1rem;
+      border-radius: 0.5rem;
+    }
+    .footer {
+      background-color: #2e7d32;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Feedback Form</h1>
+  </header>
+
+  <div class="container">
+    <h2>Submit Your Feedback</h2>
+    <form id="feedbackForm">
+      <label for="subject">Select Subject/Teacher:</label>
+      <select id="subject" required>
+        <option value="">--Select--</option>
+        <option>Math - Mr. Sharma</option>
+        <option>Physics - Ms. Verma</option>
+        <option>Chemistry - Mr. Iyer</option>
+        <option>Biology - Dr. Singh</option>
+        <option>English - Ms. Roy</option>
+      </select>
+
+      <label for="rating">Rating:</label>
+      <div class="stars" id="starRating">
+        <span class="star" data-value="1">★</span>
+        <span class="star" data-value="2">★</span>
+        <span class="star" data-value="3">★</span>
+        <span class="star" data-value="4">★</span>
+        <span class="star" data-value="5">★</span>
+      </div>
+
+      <label for="comments">Comments:</label>
+      <textarea id="comments" rows="4" placeholder="Write your comments here..."></textarea>
+
+      <button type="submit" class="submit-btn">Submit Feedback</button>
+    </form>
+
+    <div class="confirmation" id="confirmationMsg" style="display:none;">
+      Thank you! Your feedback has been submitted.
+    </div>
+
+    <div class="past-feedback">
+      <h3>Past Feedback (Sample)</h3>
+      <ul>
+        <li><strong>Math - Mr. Sharma:</strong> ★★★★☆<br>"Explains concepts well, but a bit fast-paced."</li>
+        <li><strong>Physics - Ms. Verma:</strong> ★★★★★<br>"Very interactive sessions and practical examples."</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Attendance Management System. All rights reserved.
+  </div>
+
+  <script>
+    const stars = document.querySelectorAll('.star');
+    let selectedRating = 0;
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRating = parseInt(star.dataset.value);
+        updateStars(selectedRating);
+      });
+    });
+
+    function updateStars(rating) {
+      stars.forEach(star => {
+        star.classList.toggle('selected', parseInt(star.dataset.value) <= rating);
+      });
+    }
+
+    document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (!selectedRating) {
+        alert('Please select a rating before submitting.');
+        return;
+      }
+      document.getElementById('confirmationMsg').style.display = 'block';
+      this.reset();
+      updateStars(0);
+      selectedRating = 0;
+    });
+  </script>
+</body>
+</html>

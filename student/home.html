@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Home - Attendance Management System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+      background: #f0f4f8;
+    }
+    .sidebar {
+      width: 240px;
+      background: #1b5e20;
+      color: white;
+      padding: 20px;
+      transition: transform 0.3s ease;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .sidebar a {
+      display: block;
+      padding: 12px;
+      margin: 10px 0;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .sidebar a:hover {
+      background: #2e7d32;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      background: white;
+      padding: 15px 30px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .topbar .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .topbar .profile img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+    }
+    .toggle-btn {
+      display: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .greeting {
+      padding: 30px;
+      font-size: 24px;
+      color: #333;
+    }
+    .cards {
+      display: flex;
+      gap: 20px;
+      padding: 0 30px;
+      flex-wrap: wrap;
+    }
+    .card {
+      flex: 1;
+      min-width: 220px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card i {
+      font-size: 32px;
+      color: #388e3c;
+      margin-bottom: 10px;
+    }
+    .notifications {
+      padding: 30px;
+    }
+    .notifications h3 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+    .notifications ul {
+      list-style: none;
+    }
+    .notifications ul li {
+      background: white;
+      margin-bottom: 10px;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        position: absolute;
+        z-index: 1000;
+        height: 100%;
+      }
+      .sidebar.show {
+        transform: translateX(0);
+      }
+      .toggle-btn {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <h2>Student Portal</h2>
+    <a href="#">Home</a>
+    <a href="#">Attendance</a>
+    <a href="#">Profile</a>
+    <a href="#">Marks</a>
+    <a href="#">Calendar</a>
+    <a href="#">Timetable</a>
+    <a href="#">Feedback</a>
+    <a href="#">Dashboard</a>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="toggle-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div><strong>Attendance Management System</strong></div>
+      <div class="profile">
+        <img src="https://via.placeholder.com/35" alt="User">
+        <span>John Doe</span>
+        <a href="#" style="color: #388e3c; margin-left: 10px;">Logout</a>
+      </div>
+    </div>
+
+    <div class="greeting">
+      Welcome, Student!
+    </div>
+
+    <div class="cards">
+      <div class="card" onclick="alert('Redirecting to Attendance Page')">
+        <i class="fas fa-calendar-check"></i>
+        <p>View Attendance</p>
+      </div>
+      <div class="card" onclick="alert('Redirecting to Marks Page')">
+        <i class="fas fa-graduation-cap"></i>
+        <p>Check Marks</p>
+      </div>
+      <div class="card" onclick="alert('Redirecting to Events Page')">
+        <i class="fas fa-bell"></i>
+        <p>Upcoming Events</p>
+      </div>
+      <div class="card" onclick="alert('Redirecting to Profile Page')">
+        <i class="fas fa-user"></i>
+        <p>View Profile</p>
+      </div>
+    </div>
+
+    <div class="notifications">
+      <h3>Announcements & Notifications</h3>
+      <ul id="notif-list">
+        <li>Midterm exams start from April 10, 2025.</li>
+        <li>Maths lecture on Friday swapped with Physics lecture.</li>
+        <li>College Annual Day is on May 1, 2025.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('show');
+    }
+  </script>
+</body>
+</html>

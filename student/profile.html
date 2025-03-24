@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Profile - Attendance Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f8f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #2e7d32;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .container {
+      padding: 2rem;
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .profile-header img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #2e7d32;
+    }
+    .profile-header .info {
+      font-size: 1.1rem;
+    }
+    .section {
+      background: #fff;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .section h3 {
+      margin-bottom: 1rem;
+      color: #2e7d32;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+    }
+    .form-group textarea {
+      resize: vertical;
+    }
+    .save-btn {
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .save-btn:hover {
+      background-color: #1b5e20;
+    }
+    .feedback-entry {
+      border-bottom: 1px solid #ccc;
+      padding: 0.5rem 0;
+    }
+    .feedback-entry:last-child {
+      border-bottom: none;
+    }
+    .account-settings input {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>Student Profile</h2>
+    <span>Welcome, John Doe</span>
+  </header>
+
+  <div class="container">
+    <div class="profile-header">
+      <img src="https://via.placeholder.com/120" alt="Profile Picture">
+      <div class="info">
+        <h3>John Doe</h3>
+        <p>Roll Number: 123456</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Personal Information</h3>
+      <form>
+        <div class="form-group">
+          <label>Date of Birth:</label>
+          <input type="date" value="2002-05-15">
+        </div>
+        <div class="form-group">
+          <label>Course:</label>
+          <input type="text" value="B.Tech">
+        </div>
+        <div class="form-group">
+          <label>Branch:</label>
+          <input type="text" value="AIML">
+        </div>
+        <div class="form-group">
+          <label>Semester:</label>
+          <input type="text" value="6">
+        </div>
+        <div class="form-group">
+          <label>Contact:</label>
+          <input type="text" value="9876543210">
+        </div>
+        <button type="submit" class="save-btn">Save Changes</button>
+      </form>
+    </div>
+
+    <div class="section">
+      <h3>Teacher Feedback</h3>
+      <div class="feedback-entry">
+        <strong>Subject:</strong> Mathematics <br>
+        <strong>Teacher:</strong> Dr. Sharma <br>
+        <strong>Date:</strong> 2025-03-18 <br>
+        <em>Excellent class participation and conceptual clarity.</em>
+      </div>
+      <div class="feedback-entry">
+        <strong>Subject:</strong> Physics <br>
+        <strong>Teacher:</strong> Prof. Mehra <br>
+        <strong>Date:</strong> 2025-03-15 <br>
+        <em>Needs improvement in lab work submissions.</em>
+      </div>
+    </div>
+
+    <div class="section account-settings">
+      <h3>Password & Account Settings</h3>
+      <form>
+        <div class="form-group">
+          <label>Current Password:</label>
+          <input type="password">
+        </div>
+        <div class="form-group">
+          <label>New Password:</label>
+          <input type="password">
+        </div>
+        <div class="form-group">
+          <label>Confirm New Password:</label>
+          <input type="password">
+        </div>
+        <button type="submit" class="save-btn">Update Password</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
