@@ -280,19 +280,19 @@
       .auth-container {
         padding: 30px 20px;
       }
-      
+
       .user-type-selector {
         flex-direction: column;
         gap: 5px;
         background: transparent;
         padding: 0;
       }
-      
+
       .user-type-btn {
         border: 1px solid #eee;
         background: var(--light);
       }
-      
+
       .user-type-btn.active {
         background: var(--white);
       }
@@ -312,7 +312,7 @@
         <button type="button" class="user-type-btn teacher" data-type="teacher">Teacher</button>
         <button type="button" class="user-type-btn admin" data-type="admin">Admin</button>
       </div>
-      
+
       <input type="hidden" id="userType" name="userType" value="student">
 
       <div class="input-group">
@@ -365,71 +365,71 @@
       const userTypeInput = document.getElementById('userType');
       const loginBtn = document.getElementById('loginBtn');
       const loginForm = document.getElementById('loginForm');
-      
+
       // Set initial active button
       document.querySelector('.user-type-btn.student').classList.add('active');
-      
+
       // User type selection
       userTypeBtns.forEach(btn => {
         btn.addEventListener('click', function() {
           // Remove active class from all buttons
           userTypeBtns.forEach(b => b.classList.remove('active'));
-          
+
           // Add active class to clicked button
           this.classList.add('active');
-          
+
           // Update hidden input value
           const userType = this.getAttribute('data-type');
           userTypeInput.value = userType;
-          
+
           // Update login button text and color
           loginBtn.textContent = `Login as ${userType.charAt(0).toUpperCase() + userType.slice(1)}`;
           loginBtn.className = `auth-btn ${userType}`;
         });
       });
-      
+
       // Form submission
       loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const userType = userTypeInput.value;
         const rememberMe = document.getElementById('remember').checked;
-        
+
         // Basic validation
         if (!email || !password) {
           alert('Please fill in all fields!');
           return;
         }
-        
+
         // Here you would typically send this data to your server for authentication
         console.log('Login attempt:', { email, password, userType, rememberMe });
-        
+
         // Simulate authentication
         authenticateUser(email, password, userType, rememberMe);
       });
-      
+
       // Forgot password
       document.getElementById('forgotPassword').addEventListener('click', function(e) {
         e.preventDefault();
         const userType = userTypeInput.value;
         alert(`Redirecting to ${userType} password recovery...`);
       });
-      
+
       // Simulated authentication function
       function authenticateUser(email, password, userType, rememberMe) {
         // Show loading state
         loginBtn.disabled = true;
         loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
-        
+
         setTimeout(() => {
           // Simulate successful login
           alert(`Authentication successful! Redirecting to ${userType} dashboard...`);
-          
+
           // Store user type in session
           sessionStorage.setItem('userType', userType);
-          
+
           // Redirect to appropriate dashboard
           switch(userType) {
             case 'student':
