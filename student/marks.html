@@ -3,161 +3,1014 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marks - Attendance Management System</title>
+  <title>Academic Performance | CSE Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    :root {
+      --primary: #7b68ee;
+      --secondary: #ff9a76;
+      --bg-light: #e6e6fa;
+      --text-dark: #2c3e50;
+      --text-light: #f8f9fa;
+      --success: #2ecc71;
+      --warning: #f39c12;
+      --danger: #e74c3c;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f8f4;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 0;
-      color: #333;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
     }
-    header {
-      background-color: #2e7d32;
-      color: white;
+
+/* Main Navigation Styles */
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 1rem 0;
+      text-decoration: none;
+    }
+
+    .navbar-logo i {
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+
+    .navbar-logo span {
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-dark);
+      text-decoration: none;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .nav-link i {
+      font-size: 1.1rem;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.5rem;
+      cursor: pointer;
       padding: 1rem;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem;
+      border-radius: 2rem;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .user-profile:hover {
+      background-color: var(--primary-light);
+    }
+
+    .user-profile img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary-light);
+    }
+
+    .user-profile span {
+      font-weight: 500;
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 2rem;
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .user-profile:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.8rem 1.5rem;
+      color: var(--text-dark);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .dropdown-menu a i {
+      margin-right: 8px;
+      width: 20px;
       text-align: center;
     }
-    nav {
-      background-color: #388e3c;
-      color: white;
-      padding: 0.5rem 1rem;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-    }
-    nav a:hover {
-      background-color: #2e7d32;
+
+    /* Mobile Styles */
+    @media (max-width: 992px) {
+      .navbar {
+        flex-wrap: wrap;
+        padding: 0 1rem;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .navbar-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .navbar-links.active {
+        display: flex;
+      }
+
+      .nav-link {
+        border-radius: 0;
+        padding: 1rem;
+        border-bottom: 1px solid var(--primary-light);
+      }
+
+      .nav-link.active::after {
+        display: none;
+      }
+
+      .user-profile {
+        margin-left: auto;
+        padding: 0.5rem 1rem;
+      }
+
+      .dropdown-menu {
+        right: 1rem;
+        width: calc(100% - 2rem);
+      }
     }
     .container {
       padding: 2rem;
-      max-width: 1000px;
-      margin: auto;
+      max-width: 1400px;
+      margin: 0 auto;
     }
-    .summary {
-      background-color: #e8f5e9;
-      padding: 1rem;
-      border-radius: 1rem;
+
+    .page-title {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 1rem;
       margin-bottom: 2rem;
-      text-align: center;
+      flex-wrap: wrap;
     }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      min-width: 200px;
+    }
+
+    .filter-group label {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--primary);
+    }
+
+    .filter-group select {
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.75rem;
+      font-family: 'Poppins', sans-serif;
+      background-color: white;
+    }
+
+    .performance-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s;
+      border-left: 4px solid var(--primary);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .card p {
+      font-size: 1.75rem;
+      margin: 0.5rem 0 0;
+      font-weight: 700;
+    }
+
+    .card .secondary {
+      color: var(--secondary);
+    }
+
+    .card .success {
+      color: var(--success);
+    }
+
+    .card .warning {
+      color: var(--warning);
+    }
+
+    .card .danger {
+      color: var(--danger);
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      font-weight: 500;
+      color: #777;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .marks-section {
+      background-color: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
     .marks-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 2rem;
-    }
-    .marks-table th, .marks-table td {
-      border: 1px solid #ccc;
-      padding: 0.75rem;
-      text-align: center;
-    }
-    .marks-table th {
-      background-color: #dcedc8;
-    }
-    .filter {
       margin-bottom: 1rem;
     }
-    .remarks {
-      margin-top: 2rem;
-      background-color: #fffde7;
+
+    .marks-table th {
+      background-color: var(--primary);
+      color: white;
       padding: 1rem;
-      border-radius: 0.5rem;
+      text-align: left;
+      font-weight: 500;
     }
+
+    .marks-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .marks-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .marks-table tr:hover td {
+      background-color: #f9f9ff;
+    }
+
+    .grade-Aplus { color: #27ae60; font-weight: 600; }
+    .grade-A { color: #2ecc71; font-weight: 600; }
+    .grade-Bplus { color: #f39c12; font-weight: 600; }
+    .grade-B { color: #e67e22; font-weight: 600; }
+    .grade-C { color: #e74c3c; font-weight: 600; }
+
+    .chart-container {
+      background-color: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .chart-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .chart-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .remarks-card {
+      background-color: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 4px solid var(--secondary);
+    }
+
+    .remarks-card h3 {
+      margin-top: 0;
+      color: var(--secondary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--primary), #9b59b6);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 2rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 8px rgba(123, 104, 238, 0.3);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(123, 104, 238, 0.4);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--secondary), #ff7b54);
+      box-shadow: 0 4px 8px rgba(255, 154, 118, 0.3);
+    }
+
+    .btn-secondary:hover {
+      box-shadow: 0 6px 12px rgba(255, 154, 118, 0.4);
+    }
+
     .footer {
-      background-color: #2e7d32;
+      background: linear-gradient(135deg, var(--primary), #9b59b6);
       color: white;
       text-align: center;
-      padding: 1rem;
+      padding: 1.5rem;
       margin-top: 2rem;
+    }
+
+    .progress-container {
+      width: 100%;
+      background-color: #f1f1f1;
+      border-radius: 1rem;
+      margin: 0.5rem 0;
+    }
+
+    .progress-bar {
+      height: 10px;
+      border-radius: 1rem;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .comparison-card {
+      background-color: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 1.5rem;
+    }
+
+    .comparison-card h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .practical-badge {
+      background-color: rgba(123, 104, 238, 0.1);
+      color: var(--primary);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .theory-badge {
+      background-color: rgba(255, 154, 118, 0.1);
+      color: var(--secondary);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      nav {
+        padding: 0.5rem 1rem;
+      }
+
+      nav a {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .performance-cards {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h2>Marks Overview</h2>
-  </header>
-  <nav>
-    <a href="#">Home</a>
-    <a href="#">Attendance</a>
-    <a href="#">Profile</a>
-    <a href="#">Marks</a>
-    <a href="#">Calendar & Timetable</a>
-    <a href="#">Feedback</a>
-    <a href="#">Dashboard</a>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="home.html" class="navbar-logo">
+      <span>Attendance Management</span>
+    </a>
+
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="navbar-links" id="navbarLinks">
+      <a href="home.html" class="nav-link">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="dashboard.html" class="nav-link">
+        <i class="fas fa-calendar-check"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="marks.html" class="nav-link">
+        <i class="fas fa-chart-line"></i>
+        <span>Academics</span>
+      </a>
+      <a href="calendar.html" class="nav-link">
+        <i class="fas fa-project-diagram"></i>
+        <span>Calendar</span>
+      </a>
+      <a href="feedback.html" class="nav-link">
+        <i class="fas fa-building"></i>
+        <span>FeedBack</span>
+      </a>
+
+      <div class="user-profile">
+        <img src="#" alt="User">
+        <span>Student</span>
+        <div class="dropdown-menu">
+          <a href="profile.html">
+            <i class="fas fa-user-cog"></i>
+            <span>Profile</span>
+          </a>
+          <a href="notifications.html">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+          </a>
+          <a href="faq.html">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+          </a>
+          <a href="login.html">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </nav>
+
   <div class="container">
-    <div class="filter">
-      <label for="exam-select">Select Exam/Semester:</label>
-      <select id="exam-select">
-        <option value="sem1">Semester 1</option>
-        <option value="sem2">Semester 2</option>
-        <option value="midterm">Midterm Exams</option>
-      </select>
+    <h2 class="page-title"><i class="fas fa-graduation-cap"></i> Semester Performance - CSE 3rd Year</h2>
+
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label for="exam-select">Semester</label>
+        <select id="exam-select">
+          <option value="sem5">Semester 5 (2024)</option>
+          <option value="sem6" selected>Semester 6 (2025)</option>
+          <option value="sem4">Semester 4 (2023)</option>
+          <option value="all">All Semesters</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="subject-select">Subject Type</label>
+        <select id="subject-select">
+          <option value="all">All Subjects</option>
+          <option value="core">Core Subjects</option>
+          <option value="elective">Electives</option>
+          <option value="lab">Lab Courses</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="view-select">View Mode</label>
+        <select id="view-select">
+          <option value="detailed">Detailed Marks</option>
+          <option value="comparison">Department Comparison</option>
+          <option value="trends">Progress Trends</option>
+        </select>
+      </div>
     </div>
 
-    <div class="summary">
-      <h3>Overall Performance</h3>
-      <p>Total Marks: 480 / 600</p>
-      <p>GPA: 8.2</p>
+    <div class="performance-cards">
+      <div class="card">
+        <h3>CGPA</h3>
+        <p class="success">8.7/10</p>
+        <div class="progress-container">
+          <div class="progress-bar" style="width: 87%"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Department Rank</h3>
+        <p>12/120</p>
+        <div class="progress-container">
+          <div class="progress-bar" style="width: 90%"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Lab Performance</h3>
+        <p class="success">91%</p>
+        <div class="progress-container">
+          <div class="progress-bar" style="width: 91%"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Improvement</h3>
+        <p class="success">+0.4 CGPA</p>
+        <p>From last semester</p>
+      </div>
     </div>
 
-    <table class="marks-table">
-      <thead>
-        <tr>
-          <th>Subject</th>
-          <th>Internal Marks</th>
-          <th>External Marks</th>
-          <th>Total</th>
-          <th>Grade</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>Math</td><td>45</td><td>75</td><td>120</td><td>A</td></tr>
-        <tr><td>Physics</td><td>40</td><td>70</td><td>110</td><td>B+</td></tr>
-        <tr><td>Chemistry</td><td>42</td><td>72</td><td>114</td><td>A</td></tr>
-        <tr><td>English</td><td>38</td><td>65</td><td>103</td><td>B</td></tr>
-        <tr><td>Biology</td><td>46</td><td>78</td><td>124</td><td>A+</td></tr>
-      </tbody>
-    </table>
+    <div class="tabs">
+      <div class="tab active" data-tab="marks">Subject Marks</div>
+      <div class="tab" data-tab="comparison">Department Comparison</div>
+      <div class="tab" data-tab="trends">Progress Trends</div>
+    </div>
 
-    <canvas id="marksChart" width="600" height="300"></canvas>
+    <div class="tab-content active" id="marks">
+      <div class="marks-section">
+        <table class="marks-table">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Type</th>
+              <th>Theory (70)</th>
+              <th>Practical (30)</th>
+              <th>Total (100)</th>
+              <th>Grade</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Data Structures & Algorithms</td>
+              <td><span class="theory-badge">Core</span></td>
+              <td>58/70</td>
+              <td>27/30</td>
+              <td>85/100</td>
+              <td class="grade-A">A</td>
+              <td>Excellent problem solving</td>
+            </tr>
+            <tr>
+              <td>Database Systems</td>
+              <td><span class="theory-badge">Core</span></td>
+              <td>52/70</td>
+              <td>25/30</td>
+              <td>77/100</td>
+              <td class="grade-Bplus">B+</td>
+              <td>Good theoretical understanding</td>
+            </tr>
+            <tr>
+              <td>Computer Networks</td>
+              <td><span class="theory-badge">Core</span></td>
+              <td>60/70</td>
+              <td>28/30</td>
+              <td>88/100</td>
+              <td class="grade-A">A</td>
+              <td>Strong in network protocols</td>
+            </tr>
+            <tr>
+              <td>Operating Systems</td>
+              <td><span class="theory-badge">Core</span></td>
+              <td>48/70</td>
+              <td>26/30</td>
+              <td>74/100</td>
+              <td class="grade-B">B</td>
+              <td>Need more practice in concepts</td>
+            </tr>
+            <tr>
+              <td>Software Engineering</td>
+              <td><span class="theory-badge">Core</span></td>
+              <td>55/70</td>
+              <td>29/30</td>
+              <td>84/100</td>
+              <td class="grade-A">A</td>
+              <td>Excellent in project work</td>
+            </tr>
+            <tr>
+              <td>Machine Learning</td>
+              <td><span class="practical-badge">Elective</span></td>
+              <td>62/70</td>
+              <td>28/30</td>
+              <td>90/100</td>
+              <td class="grade-A">A</td>
+              <td>Outstanding in implementations</td>
+            </tr>
+            <tr>
+              <td>DAA Lab</td>
+              <td><span class="practical-badge">Lab</span></td>
+              <td>-</td>
+              <td>92/100</td>
+              <td>92/100</td>
+              <td class="grade-Aplus">A+</td>
+              <td>Excellent coding skills</td>
+            </tr>
+            <tr>
+              <td>DBMS Lab</td>
+              <td><span class="practical-badge">Lab</span></td>
+              <td>-</td>
+              <td>88/100</td>
+              <td>88/100</td>
+              <td class="grade-A">A</td>
+              <td>Good query optimization</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-    <div class="remarks">
-      <h4>Teacher's Remarks</h4>
-      <p>Keep up the good work in Biology. Improve written skills in English.</p>
+      <div class="chart-row">
+        <div class="chart-container">
+          <h3>Core Subjects Performance</h3>
+          <canvas id="coreSubjectsChart"></canvas>
+        </div>
+        <div class="chart-container">
+          <h3>Practical vs Theory</h3>
+          <canvas id="practicalTheoryChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="comparison">
+      <div class="comparison-card">
+        <h3><i class="fas fa-chart-bar"></i> Department Performance Comparison</h3>
+        <canvas id="departmentChart"></canvas>
+      </div>
+
+      <div class="comparison-card">
+        <h3><i class="fas fa-user-friends"></i> Batch Comparison</h3>
+        <canvas id="batchComparisonChart"></canvas>
+      </div>
+    </div>
+
+    <div class="tab-content" id="trends">
+      <div class="chart-container">
+        <h3><i class="fas fa-chart-line"></i> CGPA Trend</h3>
+        <canvas id="cgpaTrendChart"></canvas>
+      </div>
+
+      <div class="chart-container">
+        <h3><i class="fas fa-project-diagram"></i> Project Scores</h3>
+        <canvas id="projectScoresChart"></canvas>
+      </div>
+    </div>
+
+    <div class="remarks-card">
+      <h3><i class="fas fa-comment-alt"></i> Advisor's Remarks</h3>
+      <p>John has shown excellent progress in practical implementations, particularly in Data Structures and Machine Learning. His lab performance is outstanding, ranking in the top 15% of the department. He should focus more on Operating Systems concepts to improve his theory scores. With his current trajectory, he's well positioned for good placement opportunities. I recommend participating in more coding competitions to further sharpen his skills.</p>
+      <button class="btn"><i class="fas fa-file-export"></i> Export Academic Record</button>
+      <button class="btn-secondary"><i class="fas fa-print"></i> Print Report</button>
     </div>
   </div>
 
   <div class="footer">
-    &copy; 2025 Attendance Management System. All rights reserved.
+    <p>&copy; 2025 Computer Science Department - Academic Portal. All rights reserved.</p>
   </div>
 
   <script>
-    const ctx = document.getElementById('marksChart');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Math', 'Physics', 'Chemistry', 'English', 'Biology'],
-        datasets: [{
-          label: 'Total Marks',
-          data: [120, 110, 114, 103, 124],
-          backgroundColor: '#66bb6a'
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-            max: 150
+    // Initialize charts
+    document.addEventListener('DOMContentLoaded', function() {
+      // Core subjects chart
+      const coreCtx = document.getElementById('coreSubjectsChart').getContext('2d');
+      new Chart(coreCtx, {
+        type: 'bar',
+        data: {
+          labels: ['DSA', 'DBMS', 'CN', 'OS', 'SE'],
+          datasets: [{
+            label: 'Your Marks',
+            data: [85, 77, 88, 74, 84],
+            backgroundColor: '#7b68ee',
+            borderRadius: 6,
+          }, {
+            label: 'Dept Average',
+            data: [72, 68, 75, 70, 76],
+            backgroundColor: '#ff9a76',
+            borderRadius: 6,
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100
+            }
           }
         }
+      });
+
+      // Practical vs Theory chart
+      const ptCtx = document.getElementById('practicalTheoryChart').getContext('2d');
+      new Chart(ptCtx, {
+        type: 'radar',
+        data: {
+          labels: ['DSA', 'DBMS', 'CN', 'OS', 'SE', 'ML'],
+          datasets: [{
+            label: 'Theory',
+            data: [83, 74, 86, 69, 79, 89],
+            backgroundColor: 'rgba(123, 104, 238, 0.2)',
+            borderColor: '#7b68ee',
+            pointBackgroundColor: '#7b68ee'
+          }, {
+            label: 'Practical',
+            data: [90, 83, 93, 87, 97, 93],
+            backgroundColor: 'rgba(255, 154, 118, 0.2)',
+            borderColor: '#ff9a76',
+            pointBackgroundColor: '#ff9a76'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            r: {
+              angleLines: {
+                display: true
+              },
+              suggestedMin: 60,
+              suggestedMax: 100
+            }
+          }
+        }
+      });
+
+      // Department chart
+      const deptCtx = document.getElementById('departmentChart').getContext('2d');
+      new Chart(deptCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Your Score', 'Top 10%', 'Top 25%', 'Median', 'Bottom 25%'],
+          datasets: [{
+            label: 'Performance Comparison',
+            data: [87, 93, 89, 82, 75],
+            backgroundColor: [
+              '#7b68ee',
+              '#27ae60',
+              '#2ecc71',
+              '#f39c12',
+              '#e74c3c'
+            ],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100
+            }
+          }
+        }
+      });
+
+      // Batch comparison chart
+      const batchCtx = document.getElementById('batchComparisonChart').getContext('2d');
+      new Chart(batchCtx, {
+        type: 'line',
+        data: {
+          labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6'],
+          datasets: [{
+            label: 'Your CGPA',
+            data: [8.1, 8.3, 8.4, 8.3, 8.7, 8.7],
+            borderColor: '#7b68ee',
+            backgroundColor: 'rgba(123, 104, 238, 0.1)',
+            fill: true,
+            tension: 0.3
+          }, {
+            label: 'Batch Topper',
+            data: [9.2, 9.4, 9.5, 9.6, 9.7, 9.8],
+            borderColor: '#27ae60',
+            backgroundColor: 'rgba(39, 174, 96, 0.1)',
+            fill: true,
+            tension: 0.3
+          }, {
+            label: 'Batch Average',
+            data: [7.5, 7.6, 7.7, 7.8, 7.9, 8.0],
+            borderColor: '#f39c12',
+            backgroundColor: 'rgba(243, 156, 18, 0.1)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: false,
+              min: 7,
+              max: 10
+            }
+          }
+        }
+      });
+
+      // CGPA trend chart
+      const cgpaCtx = document.getElementById('cgpaTrendChart').getContext('2d');
+      new Chart(cgpaCtx, {
+        type: 'line',
+        data: {
+          labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6'],
+          datasets: [{
+            label: 'Your CGPA Trend',
+            data: [8.1, 8.3, 8.4, 8.3, 8.7, 8.7],
+            borderColor: '#7b68ee',
+            backgroundColor: 'transparent',
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: false,
+              min: 7,
+              max: 10
+            }
+          }
+        }
+      });
+
+      // Project scores chart
+      const projectCtx = document.getElementById('projectScoresChart').getContext('2d');
+      new Chart(projectCtx, {
+        type: 'bar',
+        data: {
+          labels: ['DSA Project', 'DBMS Project', 'SE Project', 'ML Project', 'OS Project'],
+          datasets: [{
+            label: 'Project Scores',
+            data: [88, 85, 92, 94, 82],
+            backgroundColor: '#7b68ee',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100
+            }
+          }
+        }
+      });
+    });
+
+    // Tab functionality
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs and contents
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+        // Add active class to clicked tab
+        tab.classList.add('active');
+
+        // Show corresponding content
+        const tabId = tab.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // Filter functionality
+    document.getElementById('view-select').addEventListener('change', function() {
+      const view = this.value;
+
+      // Hide all tabs
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      // Show selected view
+      document.querySelector(`.tab[data-tab="${view}"]`).classList.add('active');
+      document.getElementById(view).classList.add('active');
+    });
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navbarLinks = document.getElementById('navbarLinks');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      navbarLinks.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.user-profile')) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          menu.style.opacity = '0';
+          menu.style.visibility = 'hidden';
+        });
       }
     });
   </script>

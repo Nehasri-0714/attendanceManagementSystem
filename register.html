@@ -1,16 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="../css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register | StudyHub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #7b68ee;      /* Soft Purple */
+      --primary-light: #e6e6fa; /* Lavender */
+      --secondary: #ff9a76;    /* Peach */
+      --accent: #ffb347;       /* Light Orange */
+      --text: #4a4a4a;        /* Soft Dark Gray */
+      --light: #f8f9ff;       /* Very Light Background */
+      --white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: var(--light);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .auth-container {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(123, 104, 238, 0.1);
+      width: 400px;
+      max-width: 90%;
+      padding: 40px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .auth-container:hover {
+      box-shadow: 0 15px 35px rgba(123, 104, 238, 0.15);
+    }
+
+    .logo {
+      margin-bottom: 25px;
+    }
+
+    .logo i {
+      font-size: 2.5rem;
+      color: var(--primary);
+    }
+
+    .logo h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-top: 10px;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .input-group {
+      position: relative;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+      outline: none;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .input-group input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(123, 104, 238, 0.2);
+    }
+
+    .input-group i {
+      position: absolute;
+      right: 15px;
+      top: 40px;
+      color: var(--text);
+      opacity: 0.6;
+    }
+
+    .name-fields {
+      display: flex;
+      gap: 15px;
+    }
+
+    .name-fields .input-group {
+      flex: 1;
+    }
+
+    .terms {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .terms input {
+      accent-color: var(--primary);
+    }
+
+    .terms a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .terms a:hover {
+      text-decoration: underline;
+    }
+
+    .auth-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .auth-btn:hover {
+      background: #6a5acd;
+      transform: translateY(-2px);
+    }
+
+    .auth-switch {
+      margin-top: 20px;
+      font-size: 0.9rem;
+    }
+
+    .auth-switch a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .auth-switch a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .auth-container {
+        padding: 30px 20px;
+      }
+      .name-fields {
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header><h1>Register</h1></header>
-    <main>
-        <p>This is the Register page.</p>
-    </main>
-    <footer><p>&copy; 2025 Attendance Management System</p></footer>
+  <div class="auth-container">
+    <div class="logo">
+      <!--<i class="fas fa-cloud-sun"></i>-->
+      <h1>Attendance Management</h1>
+    </div>
+
+    <form class="auth-form" action="#" method="POST">
+      <div class="name-fields">
+        <div class="input-group">
+          <label for="first-name">First Name</label>
+          <input type="text" id="first-name" placeholder="John" required>
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="input-group">
+          <label for="last-name">Last Name</label>
+          <input type="text" id="last-name" placeholder="Doe" required>
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="your@email.com" required>
+        <i class="fas fa-envelope"></i>
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="At least 8 characters" required>
+        <i class="fas fa-lock"></i>
+      </div>
+
+      <div class="input-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" placeholder="Re-enter password" required>
+        <i class="fas fa-lock"></i>
+      </div>
+
+      <div class="terms">
+        <input type="checkbox" id="terms" required>
+        <label for="terms">I agree to the <a href="#">Terms & Conditions</a></label>
+      </div>
+
+      <button type="submit" class="auth-btn">Create Account</button>
+    </form>
+
+    <div class="auth-switch">
+      Already have an account? <a href="login.html">Sign in</a>
+    </div>
+  </div>
+
+  <script>
+    // Simple form validation
+    document.querySelector('.auth-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      if (password !== confirmPassword) {
+        alert('Passwords do not match!');
+        return;
+      }
+
+      alert('Registration successful! Redirecting to login...');
+      window.location.href = "login.html";
+    });
+  </script>
 </body>
 </html>

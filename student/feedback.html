@@ -3,107 +3,473 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feedback Page - Attendance Management System</title>
+  <title>Feedback | Attendance Management</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f8f4;
+    :root {
+      --primary: #7b68ee;      /* Soft Purple */
+      --primary-light: #e6e6fa; /* Lavender */
+      --secondary: #ff9a76;    /* Peach */
+      --accent: #ffb347;       /* Light Orange */
+      --text: #4a4a4a;        /* Soft Dark Gray */
+      --light: #f8f9ff;       /* Very Light Background */
+      --white: #ffffff;
+      --success: #68d391;     /* Green for confirmation */
+    }
+
+    * {
       margin: 0;
       padding: 0;
-      color: #333;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
     }
-    header {
-      background-color: #2e7d32;
-      color: white;
+
+    body {
+      background-color: var(--light);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Main Navigation Styles */
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 1rem 0;
+      text-decoration: none;
+    }
+
+    .navbar-logo i {
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+
+    .navbar-logo span {
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-dark);
+      text-decoration: none;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .nav-link i {
+      font-size: 1.1rem;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.5rem;
+      cursor: pointer;
       padding: 1rem;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem;
+      border-radius: 2rem;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .user-profile:hover {
+      background-color: var(--primary-light);
+    }
+
+    .user-profile img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary-light);
+    }
+
+    .user-profile span {
+      font-weight: 500;
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 2rem;
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .user-profile:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.8rem 1.5rem;
+      color: var(--text-dark);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .dropdown-menu a i {
+      margin-right: 8px;
+      width: 20px;
       text-align: center;
     }
+
+    /* Mobile Styles */
+    @media (max-width: 992px) {
+      .navbar {
+        flex-wrap: wrap;
+        padding: 0 1rem;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .navbar-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .navbar-links.active {
+        display: flex;
+      }
+
+      .nav-link {
+        border-radius: 0;
+        padding: 1rem;
+        border-bottom: 1px solid var(--primary-light);
+      }
+
+      .nav-link.active::after {
+        display: none;
+      }
+
+      .user-profile {
+        margin-left: auto;
+        padding: 0.5rem 1rem;
+      }
+
+      .dropdown-menu {
+        right: 1rem;
+        width: calc(100% - 2rem);
+      }
+    }
+
     .container {
       max-width: 800px;
       margin: 2rem auto;
-      background: white;
       padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(123, 104, 238, 0.1);
+      border: 1px solid rgba(123, 104, 238, 0.1);
     }
+
+    h1, h2, h3 {
+      color: var(--primary);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
     h2 {
-      color: #2e7d32;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      position: relative;
+      padding-bottom: 10px;
     }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--secondary);
+      border-radius: 3px;
+    }
+
     label {
       display: block;
-      margin-top: 1rem;
+      margin: 1.2rem 0 0.5rem;
+      font-weight: 500;
+      color: var(--text);
     }
-    input[type="text"], select, textarea {
+
+    select, textarea, input[type="text"] {
       width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 0.5rem;
+      padding: 12px 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s;
+      background: var(--white);
     }
+
+    select:focus, textarea:focus, input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(123, 104, 238, 0.2);
+      outline: none;
+    }
+
     .stars {
       display: flex;
-      gap: 0.25rem;
-      font-size: 1.5rem;
-      cursor: pointer;
+      gap: 8px;
+      margin: 1rem 0;
     }
+
     .star {
-      color: #ccc;
-    }
-    .star.selected {
-      color: #fbc02d;
-    }
-    .submit-btn {
-      margin-top: 1.5rem;
-      background-color: #4caf50;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 0.5rem;
+      font-size: 2rem;
+      color: #e0e0e0;
       cursor: pointer;
+      transition: all 0.2s;
     }
+
+    .star:hover {
+      color: var(--accent);
+      transform: scale(1.2);
+    }
+
+    .star.selected {
+      color: var(--secondary);
+      transform: scale(1.1);
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(123, 104, 238, 0.2);
+    }
+
     .submit-btn:hover {
-      background-color: #388e3c;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(123, 104, 238, 0.3);
     }
+
     .confirmation {
-      margin-top: 1rem;
-      color: #2e7d32;
-      font-weight: bold;
-    }
-    .past-feedback {
-      margin-top: 2rem;
-      background-color: #e8f5e9;
+      margin-top: 1.5rem;
       padding: 1rem;
-      border-radius: 0.5rem;
+      background-color: rgba(104, 211, 145, 0.1);
+      border-radius: 10px;
+      color: var(--success);
+      font-weight: 500;
+      display: none;
+      border: 1px solid rgba(104, 211, 145, 0.3);
     }
-    .footer {
-      background-color: #2e7d32;
+
+    .past-feedback {
+      margin-top: 3rem;
+      padding: 1.5rem;
+      background-color: var(--primary-light);
+      border-radius: 12px;
+      border: 1px solid rgba(123, 104, 238, 0.1);
+    }
+
+    .feedback-item {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px dashed rgba(123, 104, 238, 0.2);
+    }
+
+    .feedback-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .feedback-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+
+    .feedback-rating {
+      color: var(--secondary);
+      font-size: 1.2rem;
+    }
+
+    .feedback-comment {
+      color: var(--text);
+      font-style: italic;
+      padding-left: 10px;
+      border-left: 3px solid var(--secondary);
+    }
+
+    footer {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
       color: white;
       text-align: center;
-      padding: 1rem;
-      margin-top: 2rem;
+      padding: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+
+      .star {
+        font-size: 1.8rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Feedback Form</h1>
+    <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="home.html" class="navbar-logo">
+      <span>Attendance Management</span>
+    </a>
+
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="navbar-links" id="navbarLinks">
+      <a href="home.html" class="nav-link">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="dashboard.html" class="nav-link">
+        <i class="fas fa-calendar-check"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="marks.html" class="nav-link">
+        <i class="fas fa-chart-line"></i>
+        <span>Academics</span>
+      </a>
+      <a href="calendar.html" class="nav-link">
+        <i class="fas fa-project-diagram"></i>
+        <span>Calendar</span>
+      </a>
+      <a href="feedback.html" class="nav-link">
+        <i class="fas fa-building"></i>
+        <span>FeedBack</span>
+      </a>
+
+      <div class="user-profile">
+        <img src="#" alt="User">
+        <span>Student</span>
+        <div class="dropdown-menu">
+          <a href="profile.html">
+            <i class="fas fa-user-cog"></i>
+            <span>Profile</span>
+          </a>
+          <a href="notifications.html">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+          </a>
+          <a href="faq.html">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+          </a>
+          <a href="login.html">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
   </header>
 
   <div class="container">
-    <h2>Submit Your Feedback</h2>
+    <h2>Share Your Feedback</h2>
     <form id="feedbackForm">
-      <label for="subject">Select Subject/Teacher:</label>
+      <label for="subject">Select Faculty/Subject</label>
       <select id="subject" required>
-        <option value="">--Select--</option>
-        <option>Math - Mr. Sharma</option>
-        <option>Physics - Ms. Verma</option>
-        <option>Chemistry - Mr. Iyer</option>
-        <option>Biology - Dr. Singh</option>
-        <option>English - Ms. Roy</option>
+        <option value="">-- Select --</option>
+        <option>Mathematics - Prof. Sharma</option>
+        <option>Computer Science - Dr. Patel</option>
+        <option>Physics - Dr. Kumar</option>
+        <option>Chemistry - Prof. Singh</option>
+        <option>English - Dr. Gupta</option>
       </select>
 
-      <label for="rating">Rating:</label>
+      <label>Rating</label>
       <div class="stars" id="starRating">
         <span class="star" data-value="1">★</span>
         <span class="star" data-value="2">★</span>
@@ -112,56 +478,136 @@
         <span class="star" data-value="5">★</span>
       </div>
 
-      <label for="comments">Comments:</label>
-      <textarea id="comments" rows="4" placeholder="Write your comments here..."></textarea>
+      <label for="comments">Your Feedback</label>
+      <textarea id="comments" rows="5" placeholder="How can we improve the attendance system?"></textarea>
 
-      <button type="submit" class="submit-btn">Submit Feedback</button>
+      <button type="submit" class="submit-btn">
+        <i class="fas fa-paper-plane"></i> Submit Feedback
+      </button>
     </form>
 
-    <div class="confirmation" id="confirmationMsg" style="display:none;">
-      Thank you! Your feedback has been submitted.
+    <div class="confirmation" id="confirmationMsg">
+      <i class="fas fa-check-circle"></i> Thank you! Your feedback has been submitted.
     </div>
 
     <div class="past-feedback">
-      <h3>Past Feedback (Sample)</h3>
-      <ul>
-        <li><strong>Math - Mr. Sharma:</strong> ★★★★☆<br>"Explains concepts well, but a bit fast-paced."</li>
-        <li><strong>Physics - Ms. Verma:</strong> ★★★★★<br>"Very interactive sessions and practical examples."</li>
-      </ul>
+      <h3><i class="fas fa-history"></i> Recent Feedback</h3>
+
+      <div class="feedback-item">
+        <div class="feedback-header">
+          <strong>Mathematics - Prof. Sharma</strong>
+          <span class="feedback-rating">★★★★★</span>
+        </div>
+        <p class="feedback-comment">"The automatic attendance system saves so much time compared to manual roll calls!"</p>
+      </div>
+
+      <div class="feedback-item">
+        <div class="feedback-header">
+          <strong>Computer Science - Dr. Patel</strong>
+          <span class="feedback-rating">★★★★☆</span>
+        </div>
+        <p class="feedback-comment">"Very accurate, but sometimes the facial recognition takes a few tries."</p>
+      </div>
     </div>
   </div>
 
-  <div class="footer">
-    &copy; 2025 Attendance Management System. All rights reserved.
-  </div>
+  <footer>
+    &copy; 2025 Attendance Management System | Accurate Tracking
+  </footer>
 
   <script>
     const stars = document.querySelectorAll('.star');
     let selectedRating = 0;
 
+    // Star rating interaction
     stars.forEach(star => {
       star.addEventListener('click', () => {
         selectedRating = parseInt(star.dataset.value);
         updateStars(selectedRating);
       });
+
+      star.addEventListener('mouseover', () => {
+        const hoverValue = parseInt(star.dataset.value);
+        if (!selectedRating) {
+          highlightStars(hoverValue);
+        }
+      });
+
+      star.addEventListener('mouseout', () => {
+        if (!selectedRating) {
+          resetStars();
+        } else {
+          updateStars(selectedRating);
+        }
+      });
     });
 
-    function updateStars(rating) {
+    function highlightStars(upTo) {
       stars.forEach(star => {
-        star.classList.toggle('selected', parseInt(star.dataset.value) <= rating);
+        const starValue = parseInt(star.dataset.value);
+        if (starValue <= upTo) {
+          star.style.color = 'var(--accent)';
+          star.style.transform = 'scale(1.1)';
+        }
       });
     }
 
+    function resetStars() {
+      stars.forEach(star => {
+        star.style.color = '#e0e0e0';
+        star.style.transform = 'scale(1)';
+      });
+    }
+
+    function updateStars(rating) {
+      stars.forEach(star => {
+        const starValue = parseInt(star.dataset.value);
+        star.classList.toggle('selected', starValue <= rating);
+        star.style.color = starValue <= rating ? 'var(--secondary)' : '#e0e0e0';
+        star.style.transform = starValue <= rating ? 'scale(1.1)' : 'scale(1)';
+      });
+    }
+
+    // Form submission
     document.getElementById('feedbackForm').addEventListener('submit', function(e) {
       e.preventDefault();
+
       if (!selectedRating) {
         alert('Please select a rating before submitting.');
         return;
       }
-      document.getElementById('confirmationMsg').style.display = 'block';
+
+      // Show confirmation
+      const confirmation = document.getElementById('confirmationMsg');
+      confirmation.style.display = 'block';
+
+      // Reset form
       this.reset();
-      updateStars(0);
+      resetStars();
       selectedRating = 0;
+
+      // Hide confirmation after 5 seconds
+      setTimeout(() => {
+        confirmation.style.display = 'none';
+      }, 5000);
+    });
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navbarLinks = document.getElementById('navbarLinks');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      navbarLinks.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.user-profile')) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          menu.style.opacity = '0';
+          menu.style.visibility = 'hidden';
+        });
+      }
     });
   </script>
 </body>

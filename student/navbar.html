@@ -1,0 +1,311 @@
+<nav style="background-color: #2e7d32; padding: 15px; color: white; display: flex; justify-content: space-between;">
+  <div><strong>Attendance System</strong></div>
+  <div>
+    <a href="home.html" style="margin: 0 10px; color: white; text-decoration: none;">Home</a>
+    <a href="attendance.html" style="margin: 0 10px; color: white; text-decoration: none;">Attendance</a>
+    <a href="profile.html" style="margin: 0 10px; color: white; text-decoration: none;">Profile</a>
+    <a href="marks.html" style="margin: 0 10px; color: white; text-decoration: none;">Marks</a>
+    <a href="calendar.html" style="margin: 0 10px; color: white; text-decoration: none;">Calendar</a>
+    <a href="timetable.html" style="margin: 0 10px; color: white; text-decoration: none;">Timetables</a>
+    <a href="feedback.html" style="margin: 0 10px; color: white; text-decoration: none;">Feedback</a>
+    <a href="dashboard.html" style="margin: 0 10px; color: white; text-decoration: none;">Dashboard</a>
+  </div>
+</nav>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navigation Bar | EduTrack</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #7b68ee;
+      --secondary: #ff9a76;
+      --bg-light: #e6e6fa;
+      --text-dark: #2c3e50;
+      --text-light: #f8f9fa;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+    }
+
+    /* Main Navigation Styles */
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 1rem 0;
+      text-decoration: none;
+    }
+
+    .navbar-logo i {
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+
+    .navbar-logo span {
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-dark);
+      text-decoration: none;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .nav-link i {
+      font-size: 1.1rem;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 1rem;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem;
+      border-radius: 2rem;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .user-profile:hover {
+      background-color: var(--primary-light);
+    }
+
+    .user-profile img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary-light);
+    }
+
+    .user-profile span {
+      font-weight: 500;
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 2rem;
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .user-profile:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.8rem 1.5rem;
+      color: var(--text-dark);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .dropdown-menu a i {
+      margin-right: 8px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 992px) {
+      .navbar {
+        flex-wrap: wrap;
+        padding: 0 1rem;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .navbar-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .navbar-links.active {
+        display: flex;
+      }
+
+      .nav-link {
+        border-radius: 0;
+        padding: 1rem;
+        border-bottom: 1px solid var(--primary-light);
+      }
+
+      .nav-link.active::after {
+        display: none;
+      }
+
+      .user-profile {
+        margin-left: auto;
+        padding: 0.5rem 1rem;
+      }
+
+      .dropdown-menu {
+        right: 1rem;
+        width: calc(100% - 2rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="home.html" class="navbar-logo">
+      <span>Attendance Management</span>
+    </a>
+
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="navbar-links" id="navbarLinks">
+      <a href="home.html" class="nav-link">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="dashboard.html" class="nav-link">
+        <i class="fas fa-calendar-check"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="marks.html" class="nav-link">
+        <i class="fas fa-chart-line"></i>
+        <span>Academics</span>
+      </a>
+      <a href="calendar.html" class="nav-link">
+        <i class="fas fa-project-diagram"></i>
+        <span>Calendar</span>
+      </a>
+      <a href="feedback.html" class="nav-link">
+        <i class="fas fa-building"></i>
+        <span>FeedBack</span>
+      </a>
+
+      <div class="user-profile">
+        <img src="#" alt="User">
+        <span>Student</span>
+        <div class="dropdown-menu">
+          <a href="profile.html">
+            <i class="fas fa-user-cog"></i>
+            <span>Profile</span>
+          </a>
+          <a href="notifications.html">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+          </a>
+          <a href="faq.html">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+          </a>
+          <a href="login.html">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navbarLinks = document.getElementById('navbarLinks');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      navbarLinks.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.user-profile')) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          menu.style.opacity = '0';
+          menu.style.visibility = 'hidden';
+        });
+      }
+    });
+  </script>
+</body>
+</html>

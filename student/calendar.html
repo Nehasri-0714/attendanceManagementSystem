@@ -3,172 +3,575 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calendar & Timetable - Attendance Management System</title>
+  <title>CSE Timetable | University Portal</title>
   <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    :root {
+      --primary: #7b68ee;
+      --primary-light: #e6e6fa;
+      --secondary: #ff9a76;
+      --accent: #ffb347;
+      --text: #4a4a4a;
+      --light: #f8f9ff;
+      --white: #ffffff;
+      --success: #68d391;
+      --warning: #f6ad55;
+      --danger: #fc8181;
+    }
+
+    * {
       margin: 0;
       padding: 0;
-      background-color: #f4f8f4;
-      color: #333;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
     }
-    header {
-      background-color: #2e7d32;
-      color: white;
-      padding: 1rem;
+
+    body {
+      background-color: var(--light);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Main Navigation Styles */
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 0 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
-    nav {
-      background-color: #388e3c;
-      color: white;
-      padding: 0.5rem 1rem;
+
+    .navbar-logo {
       display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    nav a {
-      color: white;
+      align-items: center;
+      gap: 10px;
+      padding: 1rem 0;
       text-decoration: none;
-      padding: 0.5rem 1rem;
+    }
+
+    .navbar-logo i {
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+
+    .navbar-logo span {
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-dark);
+      text-decoration: none;
+      padding: 1rem 1.5rem;
       border-radius: 0.5rem;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
     }
-    nav a:hover {
-      background-color: #2e7d32;
+
+    .nav-link:hover,
+    .nav-link.active {
+      background-color: var(--primary-light);
+      color: var(--primary);
     }
-    .container {
-      padding: 2rem;
+
+    .nav-link i {
+      font-size: 1.1rem;
     }
-    #calendar {
-      max-width: 900px;
-      margin: auto;
-      background: white;
-      padding: 1rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 3px 3px 0 0;
     }
-    .timetable {
-      max-width: 900px;
-      margin: 2rem auto;
-      background-color: #fff;
-      border-radius: 1rem;
-      padding: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .timetable table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .timetable th, .timetable td {
-      border: 1px solid #ccc;
-      padding: 0.75rem;
-      text-align: center;
-    }
-    .timetable th {
-      background-color: #e8f5e9;
-    }
-    .notification-bar {
-      background-color: #fff3cd;
-      color: #856404;
-      padding: 1rem;
-      border: 1px solid #ffeeba;
-      margin: 1rem auto;
-      max-width: 900px;
-      border-radius: 0.5rem;
-    }
-    .footer {
-      background-color: #2e7d32;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-      margin-top: 2rem;
-    }
-    .download-btn {
-      display: block;
-      margin: 1rem auto;
-      background-color: #4caf50;
-      color: white;
-      padding: 0.6rem 1.2rem;
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
       border: none;
-      border-radius: 0.5rem;
+      color: var(--primary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 1rem;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem;
+      border-radius: 2rem;
+      transition: all 0.3s;
       cursor: pointer;
     }
-    .download-btn:hover {
-      background-color: #388e3c;
+
+    .user-profile:hover {
+      background-color: var(--primary-light);
+    }
+
+    .user-profile img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary-light);
+    }
+
+    .user-profile span {
+      font-weight: 500;
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 2rem;
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .user-profile:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.8rem 1.5rem;
+      color: var(--text-dark);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .dropdown-menu a i {
+      margin-right: 8px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 992px) {
+      .navbar {
+        flex-wrap: wrap;
+        padding: 0 1rem;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .navbar-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .navbar-links.active {
+        display: flex;
+      }
+
+      .nav-link {
+        border-radius: 0;
+        padding: 1rem;
+        border-bottom: 1px solid var(--primary-light);
+      }
+
+      .nav-link.active::after {
+        display: none;
+      }
+
+      .user-profile {
+        margin-left: auto;
+        padding: 0.5rem 1rem;
+      }
+
+      .dropdown-menu {
+        right: 1rem;
+        width: calc(100% - 2rem);
+      }
+    }
+
+    .container {
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h2, h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+      margin-top: 2rem;
+      border-bottom: 2px solid var(--primary-light);
+      padding-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h3 i {
+      color: var(--secondary);
+    }
+
+    .exchange-notices {
+      background: var(--white);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(123, 104, 238, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .notice-item {
+      padding: 1rem;
+      border-bottom: 1px dashed var(--primary-light);
+      display: flex;
+      gap: 1rem;
+    }
+
+    .notice-item:last-child {
+      border-bottom: none;
+    }
+
+    .notice-icon {
+      color: var(--secondary);
+      font-size: 1.2rem;
+      margin-top: 3px;
+    }
+
+    .notice-content strong {
+      color: var(--primary);
+    }
+
+    .timetable-container {
+      background: var(--white);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(123, 104, 238, 0.1);
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+
+    .timetable {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .timetable th {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      padding: 0.8rem;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .timetable td {
+      padding: 0.8rem;
+      text-align: center;
+      border: 1px solid var(--primary-light);
+    }
+
+    .timetable tr:nth-child(even) {
+      background-color: rgba(123, 104, 238, 0.05);
+    }
+
+    .lab-session {
+      background-color: rgba(104, 211, 145, 0.2);
+      color: #2c7d47;
+      font-weight: 500;
+    }
+
+    .theory-session {
+      background-color: rgba(123, 104, 238, 0.1);
+    }
+
+    .elective-session {
+      background-color: rgba(255, 154, 118, 0.1);
+    }
+
+    .lunch-break {
+      background-color: rgba(252, 129, 129, 0.1);
+      font-style: italic;
+      color: #666;
+    }
+
+    #calendar {
+      background: var(--white);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(123, 104, 238, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .fc .fc-button {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .fc .fc-button:hover {
+      background-color: #6a5acd;
+      border-color: #6a5acd;
+    }
+
+    .fc .fc-button-primary:not(:disabled).fc-button-active {
+      background-color: var(--secondary);
+      border-color: var(--secondary);
+    }
+
+    .fc-event {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .fc-event:hover {
+      background-color: #6a5acd;
+      border-color: #6a5acd;
+    }
+
+    .footer {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      nav {
+        overflow-x: auto;
+        padding: 0.75rem 1rem;
+      }
+
+      #calendar, .timetable-container, .exchange-notices {
+        padding: 1rem;
+      }
+
+      .timetable {
+        font-size: 0.8rem;
+      }
+
+      .timetable th, .timetable td {
+        padding: 0.5rem;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h2>Calendar & Timetable</h2>
-    <span>Welcome, John Doe</span>
-  </header>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="home.html" class="navbar-logo">
+      <span>Attendance Management</span>
+    </a>
 
-  <nav>
-    <a href="#">Home</a>
-    <a href="#">Attendance</a>
-    <a href="#">Profile</a>
-    <a href="#">Marks</a>
-    <a href="#">Calendar & Timetable</a>
-    <a href="#">Feedback</a>
-    <a href="#">Dashboard</a>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="navbar-links" id="navbarLinks">
+      <a href="home.html" class="nav-link">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="dashboard.html" class="nav-link">
+        <i class="fas fa-calendar-check"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="marks.html" class="nav-link">
+        <i class="fas fa-chart-line"></i>
+        <span>Academics</span>
+      </a>
+      <a href="calendar.html" class="nav-link">
+        <i class="fas fa-project-diagram"></i>
+        <span>Calendar</span>
+      </a>
+      <a href="feedback.html" class="nav-link">
+        <i class="fas fa-building"></i>
+        <span>FeedBack</span>
+      </a>
+
+      <div class="user-profile">
+        <img src="#" alt="User">
+        <span>Student</span>
+        <div class="dropdown-menu">
+          <a href="profile.html">
+            <i class="fas fa-user-cog"></i>
+            <span>Profile</span>
+          </a>
+          <a href="notifications.html">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+          </a>
+          <a href="faq.html">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+          </a>
+          <a href="login.html">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </nav>
 
   <div class="container">
-    <h3>Interactive Academic Calendar</h3>
-    <div id='calendar'></div>
-    <button class="download-btn" onclick="downloadCalendarPDF()">Download Calendar (PDF)</button>
-
-    <h3>Teacher Period Exchange Notifications</h3>
-    <div class="notification-bar" id="notificationBar">
-      <strong>Update:</strong> Period 3 of Monday replaced by Physics at 11:15 AM in Room 202.<br>
-      <strong>Update:</strong> Period 6 of Thursday replaced by Chemistry at 2:15 PM in Lab B.
+    <h3><i class="fas fa-exchange-alt"></i> Class Notices</h3>
+    <div class="exchange-notices">
+      <div class="notice-item">
+        <div class="notice-icon"><i class="fas fa-exclamation-circle"></i></div>
+        <div class="notice-content">
+          <strong>Monday, March 10:</strong> DAA Lab moved from Lab 3 to Lab 5 due to maintenance.
+        </div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-icon"><i class="fas fa-exchange-alt"></i></div>
+        <div class="notice-content">
+          <strong>Wednesday, March 12:</strong> AI lecture rescheduled to Friday 2PM (same venue).
+        </div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-icon"><i class="fas fa-info-circle"></i></div>
+        <div class="notice-content">
+          <strong>Friday, March 14:</strong> Guest lecture on Cloud Computing in Auditorium during CN slot.
+        </div>
+      </div>
     </div>
-    <button class="download-btn" onclick="downloadNotificationPDF()">Download Notifications (PDF)</button>
 
-    <h3>Weekly Timetable</h3>
-    <div class="timetable">
-      <table>
+    <h3><i class="fas fa-table"></i> Weekly Timetable (Semester 6)</h3>
+    <div class="timetable-container">
+      <table class="timetable">
         <thead>
           <tr>
             <th>Day</th>
-            <th>Period 1<br>9:00 - 10:00</th>
-            <th>Period 2<br>10:00 - 11:00</th>
-            <th>Period 3<br>11:15 - 12:15</th>
-            <th>Period 4<br>12:15 - 1:15</th>
-            <th>Period 5<br>2:00 - 3:00</th>
-            <th>Period 6<br>3:00 - 4:00</th>
+            <th>P1: 9:00-9:50</th>
+            <th>P2: 9:50-10:40</th>
+            <th>P3: 10:40-11:30</th>
+            <th>P4: 11:30-12:00</th>
+            <th>Lunch: 12:00-1:30</th>
+            <th>P5: 1:30-2:20</th>
+            <th>P6: 2:20-3:10</th>
+            <th>P7: 3:10-4:00</th>
+            <th>P8: 4:00-4:30</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Monday</td><td>Math</td><td>Physics</td><td>Chemistry</td><td>English</td><td>Biology</td><td>Computer</td>
+            <td>Monday</td>
+            <td class="theory-session">DSA</td>
+            <td class="theory-session">DSA</td>
+            <td class="theory-session">DBMS</td>
+            <td class="theory-session">DBMS</td>
+            <td class="lunch-break" rowspan="5">Lunch Break</td>
+            <td class="lab-session">DAA Lab</td>
+            <td class="lab-session">DAA Lab</td>
+            <td class="lab-session">DAA Lab</td>
+            <td class="lab-session">DAA Lab</td>
           </tr>
           <tr>
-            <td>Tuesday</td><td>English</td><td>Math</td><td>Physics</td><td>Biology</td><td>Computer</td><td>Chemistry</td>
+            <td>Tuesday</td>
+            <td class="theory-session">CN</td>
+            <td class="theory-session">CN</td>
+            <td class="theory-session">OS</td>
+            <td class="theory-session">OS</td>
+            <td class="lab-session">DBMS Lab</td>
+            <td class="lab-session">DBMS Lab</td>
+            <td class="lab-session">DBMS Lab</td>
+            <td class="lab-session">DBMS Lab</td>
           </tr>
           <tr>
-            <td>Wednesday</td><td>Physics</td><td>Chemistry</td><td>English</td><td>Math</td><td>Biology</td><td>Computer</td>
+            <td>Wednesday</td>
+            <td class="theory-session">SE</td>
+            <td class="theory-session">SE</td>
+            <td class="theory-session">CD</td>
+            <td class="theory-session">CD</td>
+            <td class="elective-session">Cloud</td>
+            <td class="elective-session">Cloud</td>
+            <td class="theory-session">Seminar</td>
+            <td class="theory-session">Seminar</td>
           </tr>
           <tr>
-            <td>Thursday</td><td>Biology</td><td>Math</td><td>English</td><td>Physics</td><td>Computer</td><td>Chemistry</td>
+            <td>Thursday</td>
+            <td class="lab-session">OS Lab</td>
+            <td class="lab-session">OS Lab</td>
+            <td class="lab-session">OS Lab</td>
+            <td class="lab-session">OS Lab</td>
+            <td class="theory-session">DSA</td>
+            <td class="theory-session">DBMS</td>
+            <td class="elective-session">ML</td>
+            <td class="elective-session">ML</td>
           </tr>
           <tr>
-            <td>Friday</td><td>Computer</td><td>Physics</td><td>Biology</td><td>Chemistry</td><td>Math</td><td>English</td>
+            <td>Friday</td>
+            <td class="theory-session">CN</td>
+            <td class="theory-session">OS</td>
+            <td class="theory-session">SE</td>
+            <td class="theory-session">CD</td>
+            <td class="lab-session">Project Lab</td>
+            <td class="lab-session">Project Lab</td>
+            <td class="lab-session">Project Lab</td>
+            <td class="lab-session">Project Lab</td>
+          </tr>
+          <tr>
+            <td>Saturday</td>
+            <td class="theory-session">DSA</td>
+            <td class="theory-session">DBMS</td>
+            <td class="theory-session">CN</td>
+            <td class="theory-session">OS</td>
+            <td colspan="5" class="lunch-break">Half Day</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <button class="download-btn" onclick="downloadTimetablePDF()">Download Timetable (PDF)</button>
+
+    <h3><i class="fas fa-calendar"></i> Academic Calendar</h3>
+    <div id='calendar'></div>
   </div>
 
   <div class="footer">
-    &copy; 2025 Attendance Management System. All rights reserved.
+    &copy; 2025 Computer Science Department - University Portal
   </div>
 
   <script>
@@ -176,58 +579,78 @@
       const calendarEl = document.getElementById('calendar');
       const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        height: 600,
+        height: 650,
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
         events: [
-          { title: 'Republic Day Holiday', date: '2025-01-26' },
-          { title: 'Midterm Exams Start', date: '2025-03-25' },
-          { title: 'Chemistry Seminar', date: '2025-04-03' },
-          { title: 'Summer Break Starts', date: '2025-05-15' }
+          {
+            title: 'Hackathon Submission',
+            start: '2025-03-15',
+            backgroundColor: '#7b68ee',
+            borderColor: '#7b68ee'
+          },
+          {
+            title: 'Midterm Exams',
+            start: '2025-03-25',
+            end: '2025-03-29',
+            backgroundColor: '#fc8181',
+            borderColor: '#fc8181'
+          },
+          {
+            title: 'Tech Symposium',
+            start: '2025-04-10',
+            backgroundColor: '#68d391',
+            borderColor: '#68d391'
+          },
+          {
+            title: 'Project Submission',
+            start: '2025-04-15',
+            backgroundColor: '#ff9a76',
+            borderColor: '#ff9a76'
+          },
+          {
+            title: 'Coding Competition',
+            start: '2025-04-18',
+            backgroundColor: '#f6ad55',
+            borderColor: '#f6ad55'
+          },
+          {
+            title: 'Summer Internships Begin',
+            start: '2025-05-15',
+            backgroundColor: '#ffb347',
+            borderColor: '#ffb347'
+          }
         ],
         eventClick: function(info) {
-          alert("Event: " + info.event.title + "\nDate: " + info.event.start.toDateString());
+          const startDate = info.event.start ? info.event.start.toDateString() : 'No date';
+          const endDate = info.event.end ? info.event.end.toDateString() : startDate;
+
+          alert(`Event: ${info.event.title}\nStart: ${startDate}\n${info.event.end ? `End: ${endDate}` : ''}`);
         }
       });
       calendar.render();
     });
 
-    function downloadCalendarPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.text("Academic Calendar Events", 10, 10);
-      doc.text("1. Republic Day Holiday - Jan 26", 10, 20);
-      doc.text("2. Midterm Exams Start - Mar 25", 10, 30);
-      doc.text("3. Chemistry Seminar - Apr 3", 10, 40);
-      doc.text("4. Summer Break Starts - May 15", 10, 50);
-      doc.save("academic_calendar.pdf");
-    }
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navbarLinks = document.getElementById('navbarLinks');
 
-    function downloadTimetablePDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.text("Weekly Timetable", 10, 10);
-      const data = [
-        ["Monday", "Math", "Physics", "Chemistry", "English", "Biology", "Computer"],
-        ["Tuesday", "English", "Math", "Physics", "Biology", "Computer", "Chemistry"],
-        ["Wednesday", "Physics", "Chemistry", "English", "Math", "Biology", "Computer"],
-        ["Thursday", "Biology", "Math", "English", "Physics", "Computer", "Chemistry"],
-        ["Friday", "Computer", "Physics", "Biology", "Chemistry", "Math", "English"]
-      ];
-      let y = 20;
-      data.forEach(row => {
-        doc.text(row.join(" | "), 10, y);
-        y += 10;
-      });
-      doc.save("weekly_timetable.pdf");
-    }
+    mobileMenuBtn.addEventListener('click', () => {
+      navbarLinks.classList.toggle('active');
+    });
 
-    function downloadNotificationPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.text("Teacher Period Exchange Notifications", 10, 10);
-      doc.text("1. Period 3 of Monday replaced by Physics at 11:15 AM in Room 202.", 10, 20);
-      doc.text("2. Period 6 of Thursday replaced by Chemistry at 2:15 PM in Lab B.", 10, 30);
-      doc.save("teacher_notifications.pdf");
-    }
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.user-profile')) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          menu.style.opacity = '0';
+          menu.style.visibility = 'hidden';
+        });
+      }
+    });
   </script>
 </body>
 </html>

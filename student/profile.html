@@ -3,168 +3,708 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Profile - Attendance Management System</title>
+  <title>Student Profile | EduTrack</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f8f4;
+    :root {
+      --primary: #7b68ee;
+      --secondary: #ff9a76;
+      --bg-light: #e6e6fa;
+      --text-dark: #2c3e50;
+      --text-light: #f8f9fa;
+      --success: #68d391;
+      --warning: #f6ad55;
+      --danger: #e74c3c;
+      --border: #ddd;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    header {
-      background-color: #2e7d32;
-      color: white;
-      padding: 1rem;
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    /* Main Navigation Styles */
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 0 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 1rem 0;
+      text-decoration: none;
+    }
+
+    .navbar-logo i {
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+
+    .navbar-logo span {
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-dark);
+      text-decoration: none;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .nav-link i {
+      font-size: 1.1rem;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 1rem;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem;
+      border-radius: 2rem;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .user-profile:hover {
+      background-color: var(--primary-light);
+    }
+
+    .user-profile img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary-light);
+    }
+
+    .user-profile span {
+      font-weight: 500;
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 2rem;
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .user-profile:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.8rem 1.5rem;
+      color: var(--text-dark);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .dropdown-menu a i {
+      margin-right: 8px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 992px) {
+      .navbar {
+        flex-wrap: wrap;
+        padding: 0 1rem;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .navbar-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .navbar-links.active {
+        display: flex;
+      }
+
+      .nav-link {
+        border-radius: 0;
+        padding: 1rem;
+        border-bottom: 1px solid var(--primary-light);
+      }
+
+      .nav-link.active::after {
+        display: none;
+      }
+
+      .user-profile {
+        margin-left: auto;
+        padding: 0.5rem 1rem;
+      }
+
+      .dropdown-menu {
+        right: 1rem;
+        width: calc(100% - 2rem);
+      }
+    }
+
     .container {
       padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
+
     .profile-header {
       display: flex;
       align-items: center;
-      gap: 2rem;
-      margin-bottom: 2rem;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+      background-color: white;
+      padding: 2.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
+
     .profile-header img {
-      width: 120px;
-      height: 120px;
+      width: 160px;
+      height: 160px;
       border-radius: 50%;
       object-fit: cover;
-      border: 3px solid #2e7d32;
+      border: 5px solid var(--bg-light);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      flex-shrink: 0;
     }
-    .profile-header .info {
-      font-size: 1.1rem;
+
+    .profile-info {
+      flex: 1;
+      min-width: 0; /* Prevent flex item overflow */
     }
+
+    .profile-info h2 {
+      color: var(--primary);
+      margin: 0 0 0.75rem 0;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .profile-info p {
+      margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .profile-info i {
+      color: var(--secondary);
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
     .section {
-      background: #fff;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
+      background-color: white;
       border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      overflow: hidden; /* Contain all child elements */
     }
+
     .section h3 {
-      margin-bottom: 1rem;
-      color: #2e7d32;
+      color: var(--primary);
+      margin: 0 0 1.75rem 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.4rem;
+      font-weight: 600;
     }
+
+    .section h3 i {
+      color: var(--secondary);
+    }
+
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 1.75rem;
+      width: 100%; /* Ensure full width */
     }
+
     .form-group label {
       display: block;
-      font-weight: bold;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.75rem;
+      font-weight: 500;
+      color: var(--primary);
+      font-size: 1rem;
     }
-    .form-group input, .form-group textarea {
+
+    .form-control {
       width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 0.5rem;
+      padding: 0.85rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s;
+      font-size: 1rem;
+      box-sizing: border-box; /* Include padding in width */
     }
-    .form-group textarea {
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(123, 104, 238, 0.2);
+    }
+
+    textarea.form-control {
+      min-height: 100px;
       resize: vertical;
     }
-    .save-btn {
-      background-color: #2e7d32;
+
+    .btn {
+      background: linear-gradient(135deg, var(--primary), #9b59b6);
       color: white;
       border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 0.5rem;
+      padding: 0.85rem 2rem;
+      border-radius: 2rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
       cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 8px rgba(123, 104, 238, 0.3);
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      width: auto; /* Allow button to size naturally */
     }
-    .save-btn:hover {
-      background-color: #1b5e20;
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(123, 104, 238, 0.4);
     }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--secondary), #ff7b54);
+      box-shadow: 0 4px 8px rgba(255, 154, 118, 0.3);
+    }
+
+    .btn-secondary:hover {
+      box-shadow: 0 6px 12px rgba(255, 154, 118, 0.4);
+    }
+
     .feedback-entry {
-      border-bottom: 1px solid #ccc;
-      padding: 0.5rem 0;
+      padding: 1.5rem;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 1.5rem;
     }
+
     .feedback-entry:last-child {
       border-bottom: none;
+      margin-bottom: 0;
     }
-    .account-settings input {
-      margin-bottom: 1rem;
+
+    .feedback-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .feedback-subject {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+
+    .feedback-teacher {
+      color: var(--secondary);
+      font-style: italic;
+      margin-left: 0.5rem;
+    }
+
+    .feedback-date {
+      color: #777;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .feedback-content {
+      padding-left: 1.25rem;
+      border-left: 3px solid var(--secondary);
+      margin-top: 1rem;
+    }
+
+    .rating {
+      display: flex;
+      gap: 0.4rem;
+      margin: 0.75rem 0;
+    }
+
+    .rating i {
+      color: var(--secondary);
+      font-size: 1.1rem;
+    }
+
+    .footer {
+      background: linear-gradient(135deg, var(--primary), #9b59b6);
+      color: white;
+      text-align: center;
+      padding: 1.75rem;
+      margin-top: 3rem;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .academic-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .academic-stats .form-group {
+      margin-bottom: 0;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.25rem;
+      }
+
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.75rem;
+        gap: 1.5rem;
+      }
+
+      .profile-header img {
+        width: 120px;
+        height: 120px;
+      }
+
+      .profile-info p {
+        justify-content: center;
+        white-space: normal;
+      }
+
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+
+      .academic-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h2>Student Profile</h2>
-    <span>Welcome, John Doe</span>
-  </header>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="home.html" class="navbar-logo">
+      <span>Attendance Management</span>
+    </a>
+
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="navbar-links" id="navbarLinks">
+      <a href="home.html" class="nav-link">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="dashboard.html" class="nav-link">
+        <i class="fas fa-calendar-check"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="marks.html" class="nav-link">
+        <i class="fas fa-chart-line"></i>
+        <span>Academics</span>
+      </a>
+      <a href="calendar.html" class="nav-link">
+        <i class="fas fa-project-diagram"></i>
+        <span>Calendar</span>
+      </a>
+      <a href="feedback.html" class="nav-link">
+        <i class="fas fa-building"></i>
+        <span>FeedBack</span>
+      </a>
+
+      <div class="user-profile">
+        <img src="#" alt="User">
+        <span>Student</span>
+        <div class="dropdown-menu">
+          <a href="profile.html">
+            <i class="fas fa-user-cog"></i>
+            <span>Profile</span>
+          </a>
+          <a href="notifications.html">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+          </a>
+          <a href="faq.html">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+          </a>
+          <a href="login.html">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
 
   <div class="container">
     <div class="profile-header">
-      <img src="https://via.placeholder.com/120" alt="Profile Picture">
-      <div class="info">
-        <h3>John Doe</h3>
-        <p>Roll Number: 123456</p>
+      <img src="#" alt="Profile Picture">
+      <div class="profile-info">
+        <h2>John Doe</h2>
+        <p><i class="fas fa-id-card"></i> Roll Number: CSE20250032</p>
+        <p><i class="fas fa-graduation-cap"></i> B.Tech Computer Science & Engineering</p>
+        <p><i class="fas fa-calendar-alt"></i> Semester 6 (2024-25)</p>
+        <p><i class="fas fa-envelope"></i> john.doe@edutrack.edu</p>
+        <p><i class="fas fa-phone"></i> +91 9876543210</p>
+      </div>
+    </div>
+
+    <div class="grid-container">
+      <div class="section">
+        <h3><i class="fas fa-user-edit"></i> Personal Information</h3>
+        <form>
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" class="form-control" value="2002-05-15">
+          </div>
+
+          <div class="form-group">
+            <label>Address</label>
+            <textarea class="form-control" rows="3">123 College Street, Tech City</textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Emergency Contact</label>
+            <input type="text" class="form-control" value="+91 9876543211 (Parent)">
+          </div>
+
+          <div class="form-group">
+            <label>Blood Group</label>
+            <input type="text" class="form-control" value="O+">
+          </div>
+
+          <button type="submit" class="btn"><i class="fas fa-save"></i> Update Profile</button>
+        </form>
+      </div>
+
+      <div class="section">
+        <h3><i class="fas fa-lock"></i> Account Security</h3>
+        <form>
+          <div class="form-group">
+            <label>Current Password</label>
+            <input type="password" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label>Confirm New Password</label>
+            <input type="password" class="form-control">
+          </div>
+
+          <button type="submit" class="btn-secondary"><i class="fas fa-key"></i> Change Password</button>
+        </form>
       </div>
     </div>
 
     <div class="section">
-      <h3>Personal Information</h3>
-      <form>
-        <div class="form-group">
-          <label>Date of Birth:</label>
-          <input type="date" value="2002-05-15">
+      <h3><i class="fas fa-comment-alt"></i> Faculty Feedback</h3>
+
+      <div class="feedback-entry">
+        <div class="feedback-header">
+          <div>
+            <span class="feedback-subject">Data Structures & Algorithms</span>
+            <span class="feedback-teacher">- Prof. A. Sharma</span>
+          </div>
+          <span class="feedback-date">March 18, 2025</span>
         </div>
-        <div class="form-group">
-          <label>Course:</label>
-          <input type="text" value="B.Tech">
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
         </div>
-        <div class="form-group">
-          <label>Branch:</label>
-          <input type="text" value="AIML">
+        <div class="feedback-content">
+          Excellent problem-solving skills and class participation. Shows strong understanding of algorithmic concepts. Consistently submits assignments on time and contributes meaningfully to discussions.
         </div>
-        <div class="form-group">
-          <label>Semester:</label>
-          <input type="text" value="6">
+      </div>
+
+      <div class="feedback-entry">
+        <div class="feedback-header">
+          <div>
+            <span class="feedback-subject">Database Systems</span>
+            <span class="feedback-teacher">- Dr. B. Patel</span>
+          </div>
+          <span class="feedback-date">March 15, 2025</span>
         </div>
-        <div class="form-group">
-          <label>Contact:</label>
-          <input type="text" value="9876543210">
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="far fa-star"></i>
         </div>
-        <button type="submit" class="save-btn">Save Changes</button>
-      </form>
+        <div class="feedback-content">
+          Good theoretical understanding but needs to improve in practical implementation of complex queries. Would benefit from more practice with query optimization techniques.
+        </div>
+      </div>
     </div>
 
     <div class="section">
-      <h3>Teacher Feedback</h3>
-      <div class="feedback-entry">
-        <strong>Subject:</strong> Mathematics <br>
-        <strong>Teacher:</strong> Dr. Sharma <br>
-        <strong>Date:</strong> 2025-03-18 <br>
-        <em>Excellent class participation and conceptual clarity.</em>
+      <h3><i class="fas fa-project-diagram"></i> Academic Details</h3>
+      <div class="academic-stats">
+        <div class="form-group">
+          <label>CGPA</label>
+          <input type="text" class="form-control" value="8.7" readonly>
+        </div>
+        <div class="form-group">
+          <label>Department Rank</label>
+          <input type="text" class="form-control" value="12/120" readonly>
+        </div>
+        <div class="form-group">
+          <label>Attendance Percentage</label>
+          <input type="text" class="form-control" value="93.5%" readonly>
+        </div>
+        <div class="form-group">
+          <label>Advisor</label>
+          <input type="text" class="form-control" value="Dr. S. Kapoor" readonly>
+        </div>
       </div>
-      <div class="feedback-entry">
-        <strong>Subject:</strong> Physics <br>
-        <strong>Teacher:</strong> Prof. Mehra <br>
-        <strong>Date:</strong> 2025-03-15 <br>
-        <em>Needs improvement in lab work submissions.</em>
+      <div class="btn-group">
+        <button class="btn"><i class="fas fa-download"></i> Download Academic Transcript</button>
+        <button class="btn-secondary"><i class="fas fa-print"></i> Print</button>
       </div>
-    </div>
-
-    <div class="section account-settings">
-      <h3>Password & Account Settings</h3>
-      <form>
-        <div class="form-group">
-          <label>Current Password:</label>
-          <input type="password">
-        </div>
-        <div class="form-group">
-          <label>New Password:</label>
-          <input type="password">
-        </div>
-        <div class="form-group">
-          <label>Confirm New Password:</label>
-          <input type="password">
-        </div>
-        <button type="submit" class="save-btn">Update Password</button>
-      </form>
     </div>
   </div>
+
+  <div class="footer">
+    <p>&copy; 2025 EduTrack Academic Management System. All rights reserved.</p>
+  </div>
 </body>
+<script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navbarLinks = document.getElementById('navbarLinks');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      navbarLinks.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.user-profile')) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          menu.style.opacity = '0';
+          menu.style.visibility = 'hidden';
+        });
+      }
+    });
+  </script>
 </html>

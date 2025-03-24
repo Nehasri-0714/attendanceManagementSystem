@@ -3,264 +3,952 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - Attendance Management System</title>
+  <title>Dashboard | Attendance Management</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    :root {
+      --primary: #7b68ee;
+      --primary-light: #e6e6fa;
+      --secondary: #ff9a76;
+      --accent: #ffb347;
+      --text: #4a4a4a;
+      --light: #f8f9ff;
+      --white: #ffffff;
+      --success: #68d391;
+      --warning: #f6ad55;
+      --danger: #fc8181;
+    }
+
+    * {
       margin: 0;
       padding: 0;
-      background-color: #f4f8f4;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
     }
-    header {
-      background-color: #2e7d32;
+
+    body {
+      background-color: var(--light);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Main Navigation Styles */
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 1rem 0;
+      text-decoration: none;
+    }
+
+    .navbar-logo i {
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+
+    .navbar-logo span {
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-dark);
+      text-decoration: none;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .nav-link i {
+      font-size: 1.1rem;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 1rem;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem;
+      border-radius: 2rem;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .user-profile:hover {
+      background-color: var(--primary-light);
+    }
+
+    .user-profile img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary-light);
+    }
+
+    .user-profile span {
+      font-weight: 500;
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 2rem;
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .user-profile:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.8rem 1.5rem;
+      color: var(--text-dark);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .dropdown-menu a i {
+      margin-right: 8px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 992px) {
+      .navbar {
+        flex-wrap: wrap;
+        padding: 0 1rem;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .navbar-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .navbar-links.active {
+        display: flex;
+      }
+
+      .nav-link {
+        border-radius: 0;
+        padding: 1rem;
+        border-bottom: 1px solid var(--primary-light);
+      }
+
+      .nav-link.active::after {
+        display: none;
+      }
+
+      .user-profile {
+        margin-left: auto;
+        padding: 0.5rem 1rem;
+      }
+
+      .dropdown-menu {
+        right: 1rem;
+        width: calc(100% - 2rem);
+      }
+    }
+
+    .container {
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 2rem;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .stats-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: var(--white);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(123, 104, 238, 0.1);
+      transition: transform 0.3s;
+      border-left: 4px solid var(--primary);
+    }
+
+    .card h4 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card p {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin: 0;
+      color: var(--text);
+    }
+
+    .streak-card {
+      background: linear-gradient(135deg, var(--primary), #9575cd);
+      color: white;
+    }
+
+    .streak-card h4, .streak-card p {
+      color: white;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+    }
+
+    .chart-container {
+      background: var(--white);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(123, 104, 238, 0.1);
+    }
+
+    .chart-container h4 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary-light);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Attendance Grid Styles */
+    .attendance-grid {
+      background: var(--white);
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(123, 104, 238, 0.1);
+      overflow: hidden;
+    }
+
+    .attendance-header {
+      background: var(--primary);
       color: white;
       padding: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    nav {
-      background-color: #388e3c;
-      color: white;
-      padding: 0.5rem 1rem;
+
+    .attendance-header h4 {
       display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      color: white;
+    }
+
+    .month-selector {
+      display: flex;
+      align-items: center;
       gap: 1rem;
     }
-    nav a {
+
+    .month-selector button {
+      background: none;
+      border: none;
       color: white;
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
+      font-size: 1.2rem;
+      cursor: pointer;
     }
-    nav a:hover {
-      background-color: #2e7d32;
-    }
-    .container {
-      padding: 2rem;
-    }
-    .stats-cards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: center;
-    }
-    .card {
-      background-color: #fff;
-      border-radius: 1rem;
-      padding: 1.5rem;
-      width: 250px;
-      text-align: center;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .charts {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: center;
-      margin-top: 2rem;
-    }
-    .chart-container {
-      background: white;
-      padding: 1rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 500px;
-    }
-    .announcements {
-      background: #fff;
-      padding: 1rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      margin-top: 2rem;
-    }
-    .filters {
-      margin-top: 2rem;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    select {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      border: 1px solid #ccc;
-    }
-    .footer {
-      background-color: #2e7d32;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-      margin-top: 2rem;
-    }
-    .dashboard-table {
-      margin-top: 2rem;
-      background: #fff;
-      padding: 1rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .dashboard-table h4 {
-      margin-bottom: 1rem;
-    }
-    .dashboard-table table {
+
+    .attendance-table {
       width: 100%;
       border-collapse: collapse;
     }
-    .dashboard-table th, .dashboard-table td {
-      padding: 0.75rem 1rem;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-    .dashboard-table th {
-      background-color: #e0f2f1;
-    }
-    .upcoming-events {
-      margin-top: 2rem;
-      background: #fff;
+
+    .attendance-table th {
+      background: var(--primary-light);
+      color: var(--primary);
       padding: 1rem;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .attendance-table td {
+      padding: 0.75rem;
+      text-align: center;
+      border: 1px solid var(--primary-light);
+    }
+
+    .date-cell {
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .attendance-status {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      line-height: 24px;
+      font-weight: bold;
+    }
+
+    .present {
+      background-color: var(--success);
+      color: white;
+    }
+
+    .absent {
+      background-color: var(--danger);
+      color: white;
+    }
+
+    .holiday {
+      background-color: var(--accent);
+      color: white;
+    }
+
+    .legend {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      padding: 1rem;
+      background: var(--light);
+      border-top: 1px solid var(--primary-light);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+
+    .info-box {
+      background: var(--white);
+      padding: 1.5rem;
       border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(123, 104, 238, 0.1);
     }
-    .upcoming-events h4 {
+
+    .info-box h4 {
+      color: var(--primary);
       margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .upcoming-events ul {
+
+    .info-box ul {
       list-style-type: none;
-      padding-left: 0;
+      padding: 0;
     }
-    .upcoming-events li {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #eee;
+
+    .info-box li {
+      padding: 0.75rem 0;
+      border-bottom: 1px dashed rgba(123, 104, 238, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-box li:last-child {
+      border-bottom: none;
+    }
+
+    .info-box li i {
+      color: var(--secondary);
+      width: 20px;
+    }
+
+    .calendar {
+      width: 100%;
+    }
+
+    .calendar .flatpickr-calendar {
+      width: 100%;
+      box-shadow: none;
+      border: 1px solid var(--primary-light);
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .action-btn {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: none;
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+    }
+
+    .action-btn:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    .action-btn i {
+      font-size: 1.5rem;
+    }
+
+    .action-btn span {
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .deadline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 0.75rem 0;
+    }
+
+    .deadline-date {
+      background: var(--primary);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .deadline-date .month {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+    }
+
+    .deadline-content {
+      flex: 1;
+    }
+
+    .deadline-content h5 {
+      margin-bottom: 0.25rem;
+    }
+
+    .deadline-content p {
+      font-size: 0.85rem;
+      color: var(--text);
+      opacity: 0.8;
+    }
+
+    .filter-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    .filter-container label {
+      font-weight: 500;
+      color: var(--primary);
+    }
+
+    select {
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--primary-light);
+      background: var(--white);
+      color: var(--text);
+      min-width: 200px;
+      transition: all 0.3s;
+    }
+
+    select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(123, 104, 238, 0.2);
+      outline: none;
+    }
+
+    footer {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      nav {
+        overflow-x: auto;
+        padding: 0.75rem 1rem;
+      }
+
+      .stats-cards {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .attendance-table {
+        display: block;
+        overflow-x: auto;
+      }
+
+      .date-cell {
+        position: sticky;
+        left: 0;
+        background: var(--white);
+        z-index: 1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .charts {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h2>Student Dashboard</h2>
-    <span>Welcome, John Doe</span>
-  </header>
-  <nav>
-    <a href="#">Home</a>
-    <a href="#">Attendance</a>
-    <a href="#">Profile</a>
-    <a href="#">Marks</a>
-    <a href="#">Calendar & Timetable</a>
-    <a href="#">Feedback</a>
-    <a href="#">Dashboard</a>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="home.html" class="navbar-logo">
+      <span>Attendance Management</span>
+    </a>
+
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="navbar-links" id="navbarLinks">
+      <a href="home.html" class="nav-link">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="dashboard.html" class="nav-link">
+        <i class="fas fa-calendar-check"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="marks.html" class="nav-link">
+        <i class="fas fa-chart-line"></i>
+        <span>Academics</span>
+      </a>
+      <a href="calendar.html" class="nav-link">
+        <i class="fas fa-project-diagram"></i>
+        <span>Calendar</span>
+      </a>
+      <a href="feedback.html" class="nav-link">
+        <i class="fas fa-building"></i>
+        <span>FeedBack</span>
+      </a>
+
+      <div class="user-profile">
+        <img src="#" alt="User">
+        <span>Student</span>
+        <div class="dropdown-menu">
+          <a href="profile.html">
+            <i class="fas fa-user-cog"></i>
+            <span>Profile</span>
+          </a>
+          <a href="notifications.html">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+          </a>
+          <a href="faq.html">
+            <i class="fas fa-question-circle"></i>
+            <span>Help</span>
+          </a>
+          <a href="login.html">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </nav>
+
   <div class="container">
-    <h3>Quick Stats</h3>
-    <div class="stats-cards">
-      <div class="card">
-        <h4>Attendance %</h4>
-        <p>89%</p>
-      </div>
-      <div class="card">
-        <h4>Average Marks</h4>
-        <p>78%</p>
-      </div>
-      <div class="card">
-        <h4>Subjects</h4>
-        <p>6</p>
-      </div>
-    </div>
+    <div class="dashboard-grid">
+      <div class="main-content">
+        <div class="filter-container">
+          <label for="date-range">Date Range:</label>
+          <select id="date-range">
+            <option>Last 7 Days</option>
+            <option>This Month</option>
+            <option>Last Month</option>
+            <option>Custom Range</option>
+          </select>
+        </div>
 
-    <div class="charts">
-      <div class="chart-container">
-        <h4>Attendance Overview</h4>
-        <canvas id="attendanceChart"></canvas>
+        <div class="stats-cards">
+          <div class="card">
+            <h4><i class="fas fa-calendar-check"></i> Attendance %</h4>
+            <p>89%</p>
+          </div>
+          <div class="card">
+            <h4><i class="fas fa-star"></i> Avg. Marks</h4>
+            <p>78%</p>
+          </div>
+          <div class="card streak-card">
+            <h4><i class="fas fa-fire"></i> Current Streak</h4>
+            <p>12 days</p>
+          </div>
+          <div class="card">
+            <h4><i class="fas fa-clock"></i> Upcoming</h4>
+            <p>5 events</p>
+          </div>
+        </div>
+
+        <div class="charts">
+          <div class="chart-container">
+            <h4><i class="fas fa-chart-pie"></i> Attendance Overview</h4>
+            <canvas id="attendanceChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <h4><i class="fas fa-chart-line"></i> Marks Trend</h4>
+            <canvas id="marksChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Attendance Grid Section -->
+        <div class="attendance-grid">
+          <div class="attendance-header">
+            <h4><i class="fas fa-table"></i> Weekly Attendance</h4>
+            <div class="month-selector">
+              <button id="prev-week"><i class="fas fa-chevron-left"></i></button>
+              <span id="current-week">Mar 10 - Mar 16, 2025</span>
+              <button id="next-week"><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="attendance-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>P1</th>
+                  <th>P2</th>
+                  <th>P3</th>
+                  <th>P4</th>
+                  <th>P5</th>
+                  <th>P6</th>
+                  <th>P7</th>
+                  <th>P8</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="date-cell">Mon, Mar 10</td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                </tr>
+                <tr>
+                  <td class="date-cell">Tue, Mar 11</td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                </tr>
+                <tr>
+                  <td class="date-cell">Wed, Mar 12</td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status absent">A</span></td>
+                  <td><span class="attendance-status absent">A</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                </tr>
+                <tr>
+                  <td class="date-cell">Thu, Mar 13</td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                </tr>
+                <tr>
+                  <td class="date-cell">Fri, Mar 14</td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status present">P</span></td>
+                  <td><span class="attendance-status holiday">H</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="legend">
+            <div class="legend-item">
+              <div class="legend-color" style="background: var(--success);"></div>
+              <span>Present (P)</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background: var(--danger);"></div>
+              <span>Absent (A)</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background: var(--accent);"></div>
+              <span>Holiday (H)</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="chart-container">
-        <h4>Marks Trend</h4>
-        <canvas id="marksChart"></canvas>
+
+      <div class="sidebar">
+        <div class="info-box">
+          <h4><i class="fas fa-calendar-day"></i> Today's Schedule</h4>
+          <ul>
+            <li>
+              <i class="fas fa-clock"></i>
+              <div>
+                <strong>09:00 AM</strong> - Mathematics (Room 302)
+              </div>
+            </li>
+            <li>
+              <i class="fas fa-clock"></i>
+              <div>
+                <strong>11:00 AM</strong> - Physics Lab (Lab 4)
+              </div>
+            </li>
+            <li>
+              <i class="fas fa-clock"></i>
+              <div>
+                <strong>02:00 PM</strong> - Computer Science (Room 201)
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="info-box">
+          <h4><i class="fas fa-bolt"></i> Quick Actions</h4>
+          <div class="quick-actions">
+            <div class="action-btn">
+              <i class="fas fa-qrcode"></i>
+              <span>Check In</span>
+            </div>
+            <div class="action-btn">
+              <i class="fas fa-file-upload"></i>
+              <span>Submit Leave</span>
+            </div>
+            <div class="action-btn">
+              <i class="fas fa-book"></i>
+              <span>View Timetable</span>
+            </div>
+            <div class="action-btn">
+              <i class="fas fa-comment-alt"></i>
+              <span>Send Feedback</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <h4><i class="fas fa-calendar-alt"></i> Calendar</h4>
+          <div class="calendar" id="calendar"></div>
+        </div>
+
+        <div class="info-box">
+          <h4><i class="fas fa-exclamation-circle"></i> Upcoming Deadlines</h4>
+          <div class="deadline-item">
+            <div class="deadline-date">
+              <div class="day">25</div>
+              <div class="month">Mar</div>
+            </div>
+            <div class="deadline-content">
+              <h5>Math Assignment</h5>
+              <p>Chapter 5 Exercises</p>
+            </div>
+          </div>
+          <div class="deadline-item">
+            <div class="deadline-date">
+              <div class="day">28</div>
+              <div class="month">Mar</div>
+            </div>
+            <div class="deadline-content">
+              <h5>Physics Lab Report</h5>
+              <p>Experiment #3</p>
+            </div>
+          </div>
+          <div class="deadline-item">
+            <div class="deadline-date">
+              <div class="day">02</div>
+              <div class="month">Apr</div>
+            </div>
+            <div class="deadline-content">
+              <h5>Chemistry Quiz</h5>
+              <p>Organic Chemistry</p>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <div class="dashboard-table">
-      <h4>Attendance Table</h4>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Subject</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>2025-03-20</td>
-            <td>Math</td>
-            <td>Present</td>
-          </tr>
-          <tr>
-            <td>2025-03-20</td>
-            <td>Physics</td>
-            <td>Absent</td>
-          </tr>
-          <tr>
-            <td>2025-03-19</td>
-            <td>Chemistry</td>
-            <td>Present</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="announcements">
-      <h4>Recent Announcements</h4>
-      <ul>
-        <li>Timetable Updated: Period 3 of Monday replaced by Physics.</li>
-        <li>Upcoming Event: Chemistry Seminar on April 3.</li>
-        <li>Midterm Exams begin on March 25.</li>
-      </ul>
-    </div>
-
-    <div class="upcoming-events">
-      <h4>Upcoming Events</h4>
-      <ul>
-        <li>Workshop on AI Tools - March 23</li>
-        <li>Sports Day - March 27</li>
-        <li>Group Discussion Competition - March 30</li>
-      </ul>
-    </div>
-
-    <div class="filters">
-      <select>
-        <option>Filter by Date</option>
-        <option>Last 7 Days</option>
-        <option>This Month</option>
-      </select>
-      <select>
-        <option>Filter by Subject</option>
-        <option>Math</option>
-        <option>Physics</option>
-        <option>Chemistry</option>
-      </select>
-      <select>
-        <option>Filter by Exam Type</option>
-        <option>Internal</option>
-        <option>External</option>
-      </select>
     </div>
   </div>
 
-  <div class="footer">&copy; 2025 Attendance Management System. All rights reserved.</div>
+  <footer>
+    &copy; 2025 Attendance Management System | Accurate Tracking
+  </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
+    // Attendance Chart
     const ctx1 = document.getElementById('attendanceChart');
     new Chart(ctx1, {
       type: 'doughnut',
       data: {
-        labels: ['Present', 'Absent'],
+        labels: ['Present (89%)', 'Late (6%)', 'Absent (5%)'],
         datasets: [{
-          label: 'Attendance',
-          data: [89, 11],
-          backgroundColor: ['#66bb6a', '#ef5350']
+          data: [89, 6, 5],
+          backgroundColor: ['#7b68ee', '#ffb347', '#ff9a76'],
+          borderWidth: 0
         }]
+      },
+      options: {
+        cutout: '70%',
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
       }
     });
 
+    // Marks Chart
     const ctx2 = document.getElementById('marksChart');
     new Chart(ctx2, {
       type: 'bar',
@@ -269,8 +957,80 @@
         datasets: [{
           label: 'Marks (%)',
           data: [82, 75, 80, 77, 74, 78],
-          backgroundColor: '#42a5f5'
+          backgroundColor: '#7b68ee',
+          borderRadius: 6,
+          borderWidth: 0
         }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            grid: {
+              color: '#e6e6fa'
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+
+    // Calendar
+    flatpickr("#calendar", {
+      inline: true,
+      monthSelectorType: 'static',
+      theme: 'light'
+    });
+
+    // Week navigation for attendance grid
+    const weeks = [
+      "Mar 3 - Mar 9, 2025",
+      "Mar 10 - Mar 16, 2025",
+      "Mar 17 - Mar 23, 2025",
+      "Mar 24 - Mar 30, 2025"
+    ];
+    let currentWeekIndex = 1;
+
+    document.getElementById('prev-week').addEventListener('click', () => {
+      currentWeekIndex = Math.max(0, currentWeekIndex - 1);
+      updateWeekDisplay();
+    });
+
+    document.getElementById('next-week').addEventListener('click', () => {
+      currentWeekIndex = Math.min(weeks.length - 1, currentWeekIndex + 1);
+      updateWeekDisplay();
+    });
+
+    function updateWeekDisplay() {
+      document.getElementById('current-week').textContent = weeks[currentWeekIndex];
+      // Here you would typically load the new week's data
+    }
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navbarLinks = document.getElementById('navbarLinks');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      navbarLinks.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.user-profile')) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          menu.style.opacity = '0';
+          menu.style.visibility = 'hidden';
+        });
       }
     });
   </script>
